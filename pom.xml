@@ -6,12 +6,12 @@
 	<parent>
 		<groupId>com.nhl.bootique.parent</groupId>
 		<artifactId>bootique-parent</artifactId>
-		<version>1.0-SNAPSHOT</version>
+		<version>0.5-SNAPSHOT</version>
 	</parent>
 
 	<groupId>com.nhl.bootique.liquibase</groupId>
 	<artifactId>bootique-liquibase</artifactId>
-	<version>1.0-SNAPSHOT</version>
+	<version>0.5-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>Jetty Integration Bundle for Bootique</name>
@@ -21,8 +21,8 @@
 
 	<properties>
 		<liquibase-version>3.4.2</liquibase-version>
-		<bootique-version>1.0-SNAPSHOT</bootique-version>
-		<bootique-cayenne-version>1.0-SNAPSHOT</bootique-cayenne-version>
+		<bootique-version>0.5-SNAPSHOT</bootique-version>
+		<bootique-cayenne-version>0.5-SNAPSHOT</bootique-cayenne-version>
 	</properties>
 
 	<scm>

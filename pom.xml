@@ -20,8 +20,8 @@
 
 	<properties>
 		<liquibase-version>3.4.2</liquibase-version>
-		<bootique-version>0.5</bootique-version>
-		<bootique-cayenne-version>0.5</bootique-cayenne-version>
+		<bootique-version>0.8-SNAPSHOT</bootique-version>
+		<bootique-cayenne-version>0.6-SNAPSHOT</bootique-cayenne-version>
 	</properties>
 
 	<scm>

@@ -3,18 +3,18 @@ package com.nhl.bootique.liquibase;
 import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.nhl.bootique.BQBinder;
-import com.nhl.bootique.FactoryModule;
+import com.nhl.bootique.ConfigModule;
 import com.nhl.bootique.factory.FactoryConfigurationService;
+import com.nhl.bootique.jdbc.DataSourceFactory;
 import com.nhl.bootique.liquibase.command.UpdateCommand;
 
-public class LiquibaseModule extends FactoryModule<LiquibaseFactory> {
+public class LiquibaseModule extends ConfigModule {
 
 	public LiquibaseModule(String configPrefix) {
-		super(LiquibaseFactory.class, configPrefix);
+		super(configPrefix);
 	}
 
 	public LiquibaseModule() {
-		super(LiquibaseFactory.class);
 	}
 
 	@Override
@@ -23,7 +23,8 @@ public class LiquibaseModule extends FactoryModule<LiquibaseFactory> {
 	}
 
 	@Provides
-	public LiquibaseRunner createRunner(FactoryConfigurationService factoryService) {
-		return createFactory(factoryService).createRunner();
+	public LiquibaseRunner createRunner(FactoryConfigurationService factoryService,
+			DataSourceFactory dataSourceFactory) {
+		return factoryService.factory(LiquibaseFactory.class, configPrefix).createRunner(dataSourceFactory);
 	}
 }

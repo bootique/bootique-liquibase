@@ -1,8 +1,10 @@
 package com.nhl.bootique.liquibase;
 
-import static org.junit.Assert.assertTrue;
+import static java.util.stream.Collectors.counting;
+import static org.junit.Assert.assertEquals;
 
 import java.util.ServiceLoader;
+import java.util.stream.StreamSupport;
 
 import org.junit.Test;
 
@@ -13,14 +15,8 @@ public class LiquibaseModuleProviderIT {
 	@Test
 	public void testPresentInJar() {
 
-		boolean[] found = { false };
-
-		ServiceLoader.load(BQModuleProvider.class).forEach(p -> {
-			if (p instanceof LiquibaseModuleProvider) {
-				found[0] = true;
-			}
-		});
-
-		assertTrue(found[0]);
+		long c = StreamSupport.stream(ServiceLoader.load(BQModuleProvider.class).spliterator(), false)
+				.filter(p -> p instanceof LiquibaseModuleProvider).collect(counting());
+		assertEquals("No provider found", 1, c);
 	}
 }

@@ -31,7 +31,9 @@ public class LiquibaseRunner {
 	public LiquibaseRunner(String changeLog, DataSource dataSource) {
 		this.changeLog = changeLog;
 		this.dataSource = dataSource;
-		this.loggerAdapter = new SLFLiquibaseAdapter(LOGGER);
+
+		Logger lbLogger = LoggerFactory.getLogger(Liquibase.class);
+		this.loggerAdapter = new SLFLiquibaseAdapter(lbLogger);
 
 		setupLogging();
 	}

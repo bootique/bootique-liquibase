@@ -16,6 +16,7 @@ import liquibase.database.DatabaseFactory;
 import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
+import liquibase.logging.LogFactory;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 
@@ -25,10 +26,14 @@ public class LiquibaseRunner {
 
 	private DataSource dataSource;
 	private String changeLog;
+	private SLFLiquibaseAdapter loggerAdapter;
 
 	public LiquibaseRunner(String changeLog, DataSource dataSource) {
 		this.changeLog = changeLog;
 		this.dataSource = dataSource;
+		this.loggerAdapter = new SLFLiquibaseAdapter(LOGGER);
+
+		setupLogging();
 	}
 
 	public <T> T runWithLiquibase(Function<Liquibase, T> op) {
@@ -43,19 +48,26 @@ public class LiquibaseRunner {
 
 	protected Liquibase createLiquibase() {
 		ResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor();
-
-		Database liquibaseDB;
 		try {
-			liquibaseDB = createDatabase(dataSource.getConnection(), resourceAccessor);
+			Database liquibaseDB = createDatabase(dataSource.getConnection(), resourceAccessor);
 
 			// TODO: other LB settings?
-			
+
 			LOGGER.info("Change log: '{}'", changeLog);
 
 			return new Liquibase(changeLog, resourceAccessor, liquibaseDB);
 		} catch (SQLException | LiquibaseException e) {
 			throw new RuntimeException("Error creating liquibase", e);
 		}
+	}
+
+	protected void setupLogging() {
+		LogFactory.setInstance(new LogFactory() {
+			@Override
+			public liquibase.logging.Logger getLog(String name) {
+				return loggerAdapter;
+			}
+		});
 	}
 
 	protected Database createDatabase(Connection c, ResourceAccessor resourceAccessor) throws DatabaseException {

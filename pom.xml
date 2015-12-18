@@ -13,7 +13,7 @@
 	<version>0.7-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Jetty Integration Bundle for Bootique</name>
+	<name>Liquibase Integration with Bootique</name>
 	<description>
 		Provides Liquibase integration with Bootique.
 	</description>

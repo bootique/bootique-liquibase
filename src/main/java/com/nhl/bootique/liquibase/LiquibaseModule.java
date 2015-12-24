@@ -4,7 +4,7 @@ import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.nhl.bootique.BQBinder;
 import com.nhl.bootique.ConfigModule;
-import com.nhl.bootique.factory.FactoryConfigurationService;
+import com.nhl.bootique.config.ConfigurationFactory;
 import com.nhl.bootique.jdbc.DataSourceFactory;
 import com.nhl.bootique.liquibase.command.UpdateCommand;
 
@@ -23,8 +23,7 @@ public class LiquibaseModule extends ConfigModule {
 	}
 
 	@Provides
-	public LiquibaseRunner createRunner(FactoryConfigurationService factoryService,
-			DataSourceFactory dataSourceFactory) {
-		return factoryService.factory(LiquibaseFactory.class, configPrefix).createRunner(dataSourceFactory);
+	public LiquibaseRunner createRunner(ConfigurationFactory configFactory, DataSourceFactory dataSourceFactory) {
+		return configFactory.config(LiquibaseFactory.class, configPrefix).createRunner(dataSourceFactory);
 	}
 }

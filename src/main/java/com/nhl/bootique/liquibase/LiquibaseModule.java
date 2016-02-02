@@ -2,7 +2,8 @@ package com.nhl.bootique.liquibase;
 
 import com.google.inject.Binder;
 import com.google.inject.Provides;
-import com.nhl.bootique.BQBinder;
+import com.google.inject.Singleton;
+import com.nhl.bootique.BQCoreModule;
 import com.nhl.bootique.ConfigModule;
 import com.nhl.bootique.config.ConfigurationFactory;
 import com.nhl.bootique.jdbc.DataSourceFactory;
@@ -19,7 +20,7 @@ public class LiquibaseModule extends ConfigModule {
 
 	@Override
 	public void configure(Binder binder) {
-		BQBinder.contributeTo(binder).commandTypes(UpdateCommand.class);
+		BQCoreModule.contributeCommands(binder).addBinding().to(UpdateCommand.class).in(Singleton.class);
 	}
 
 	@Provides

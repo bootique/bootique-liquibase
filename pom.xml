@@ -21,7 +21,7 @@
 	<properties>
 		<liquibase-version>3.4.2</liquibase-version>
 		<bootique-version>0.12-SNAPSHOT</bootique-version>
-		<bootique-jdbc-version>0.7</bootique-jdbc-version>
+		<bootique-jdbc-version>0.8-SNAPSHOT</bootique-jdbc-version>
 	</properties>
 
 	<scm>

@@ -1,13 +1,13 @@
-package com.nhl.bootique.liquibase;
+package io.bootique.liquibase;
 
 import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.nhl.bootique.BQCoreModule;
-import com.nhl.bootique.ConfigModule;
-import com.nhl.bootique.config.ConfigurationFactory;
-import com.nhl.bootique.jdbc.DataSourceFactory;
-import com.nhl.bootique.liquibase.command.UpdateCommand;
+import io.bootique.BQCoreModule;
+import io.bootique.ConfigModule;
+import io.bootique.config.ConfigurationFactory;
+import io.bootique.jdbc.DataSourceFactory;
+import io.bootique.liquibase.command.UpdateCommand;
 
 public class LiquibaseModule extends ConfigModule {
 

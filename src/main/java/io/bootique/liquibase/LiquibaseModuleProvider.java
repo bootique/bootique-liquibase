@@ -1,7 +1,7 @@
-package com.nhl.bootique.liquibase;
+package io.bootique.liquibase;
 
 import com.google.inject.Module;
-import com.nhl.bootique.BQModuleProvider;
+import io.bootique.BQModuleProvider;
 
 public class LiquibaseModuleProvider implements BQModuleProvider {
 

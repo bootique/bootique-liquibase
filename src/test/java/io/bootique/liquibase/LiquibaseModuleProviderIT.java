@@ -1,14 +1,13 @@
-package com.nhl.bootique.liquibase;
+package io.bootique.liquibase;
 
-import static java.util.stream.Collectors.counting;
-import static org.junit.Assert.assertEquals;
+import io.bootique.BQModuleProvider;
+import org.junit.Test;
 
 import java.util.ServiceLoader;
 import java.util.stream.StreamSupport;
 
-import org.junit.Test;
-
-import com.nhl.bootique.BQModuleProvider;
+import static java.util.stream.Collectors.counting;
+import static org.junit.Assert.assertEquals;
 
 public class LiquibaseModuleProviderIT {
 

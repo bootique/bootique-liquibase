@@ -1,4 +1,4 @@
-package com.nhl.bootique.liquibase;
+package io.bootique.liquibase;
 
 import liquibase.logging.core.AbstractLogger;
 

@@ -1,10 +1,9 @@
-package com.nhl.bootique.liquibase;
+package io.bootique.liquibase;
 
-import java.util.Objects;
+import io.bootique.jdbc.DataSourceFactory;
 
 import javax.sql.DataSource;
-
-import com.nhl.bootique.jdbc.DataSourceFactory;
+import java.util.Objects;
 
 public class LiquibaseFactory {
 

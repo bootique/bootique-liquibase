@@ -1,4 +1,4 @@
-package com.nhl.bootique.liquibase;
+package io.bootique.liquibase;
 
 import java.sql.Connection;
 import java.sql.SQLException;

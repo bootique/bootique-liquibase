@@ -1,18 +1,16 @@
-package com.nhl.bootique.liquibase.command;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+package io.bootique.liquibase.command;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.nhl.bootique.cli.Cli;
-import com.nhl.bootique.command.CommandMetadata;
-import com.nhl.bootique.command.CommandOutcome;
-import com.nhl.bootique.command.CommandWithMetadata;
-import com.nhl.bootique.liquibase.LiquibaseRunner;
-
+import io.bootique.cli.Cli;
+import io.bootique.command.CommandMetadata;
+import io.bootique.command.CommandOutcome;
+import io.bootique.command.CommandWithMetadata;
+import io.bootique.liquibase.LiquibaseRunner;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UpdateCommand extends CommandWithMetadata {
 

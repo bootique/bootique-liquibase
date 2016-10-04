@@ -20,8 +20,8 @@
 
 	<properties>
 		<liquibase-version>3.4.2</liquibase-version>
-		<bootique-version>0.20-SNAPSHOT</bootique-version>
-		<bootique-jdbc-version>0.12-SNAPSHOT</bootique-jdbc-version>
+		<bootique-version>0.20</bootique-version>
+		<bootique-jdbc-version>0.12</bootique-jdbc-version>
 	</properties>
 
 	<scm>

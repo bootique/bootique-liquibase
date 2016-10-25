@@ -19,7 +19,7 @@
 	</description>
 
 	<properties>
-		<liquibase-version>3.4.2</liquibase-version>
+		<liquibase-version>3.5.3</liquibase-version>
 		<bootique-version>0.20</bootique-version>
 		<bootique-jdbc-version>0.12</bootique-jdbc-version>
 	</properties>
@@ -51,13 +51,28 @@
 				<version>${bootique-version}</version>
 			</dependency>
 			<dependency>
+				<groupId>io.bootique</groupId>
+				<artifactId>bootique-test</artifactId>
+				<version>${bootique-version}</version>
+			</dependency>
+			<dependency>
 				<groupId>io.bootique.jdbc</groupId>
 				<artifactId>bootique-jdbc</artifactId>
 				<version>${bootique-jdbc-version}</version>
 			</dependency>
 			<dependency>
+				<groupId>io.bootique.jdbc</groupId>
+				<artifactId>bootique-jdbc-test</artifactId>
+				<version>${bootique-jdbc-version}</version>
+			</dependency>
+			<dependency>
 				<groupId>org.slf4j</groupId>
 				<artifactId>slf4j-api</artifactId>
+				<version>1.7.13</version>
+			</dependency>
+			<dependency>
+				<groupId>org.slf4j</groupId>
+				<artifactId>slf4j-simple</artifactId>
 				<version>1.7.13</version>
 			</dependency>
 		</dependencies>
@@ -73,6 +88,21 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.bootique</groupId>
+			<artifactId>bootique-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.bootique.jdbc</groupId>
+			<artifactId>bootique-jdbc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
 			<scope>test</scope>
 		</dependency>
 

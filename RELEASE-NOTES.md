@@ -1,3 +1,7 @@
+## 0.11
+
+* #8 Upgrade to the latest Liquibase 3.5.3
+
 ## 0.10
 
 * #6  Upgrade to Bootique 0.20

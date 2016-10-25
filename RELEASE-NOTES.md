@@ -1,6 +1,7 @@
 ## 0.11
 
 * #8 Upgrade to the latest Liquibase 3.5.3
+* #9 Upgrades to latest BQ, JDBC, LB
 
 ## 0.10
 

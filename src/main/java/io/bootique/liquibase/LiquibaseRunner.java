@@ -1,14 +1,6 @@
 package io.bootique.liquibase;
 
-import java.sql.Connection;
-import java.sql.SQLException;
-import java.util.function.Function;
-
-import javax.sql.DataSource;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import io.bootique.liquibase.database.DerbyDatabase;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
@@ -19,6 +11,13 @@ import liquibase.exception.LiquibaseException;
 import liquibase.logging.LogFactory;
 import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.ResourceAccessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.sql.DataSource;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.function.Function;
 
 public class LiquibaseRunner {
 
@@ -75,7 +74,12 @@ public class LiquibaseRunner {
 	protected Database createDatabase(Connection c, ResourceAccessor resourceAccessor) throws DatabaseException {
 
 		DatabaseConnection liquibaseConnection = new JdbcConnection(c);
-		Database database = DatabaseFactory.getInstance().findCorrectDatabaseImplementation(liquibaseConnection);
+		DatabaseFactory databaseFactory = DatabaseFactory.getInstance();
+
+		// expand factory with our extensions....
+		databaseFactory.register(new DerbyDatabase());
+
+		Database database = databaseFactory.findCorrectDatabaseImplementation(liquibaseConnection);
 
 		// TODO: set default schema?
 

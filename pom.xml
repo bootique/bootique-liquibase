@@ -10,7 +10,7 @@
 
 	<groupId>io.bootique.liquibase</groupId>
 	<artifactId>bootique-liquibase</artifactId>
-	<version>0.11-SNAPSHOT</version>
+	<version>0.11-SNAPSHOT</version>Tab
 	<packaging>jar</packaging>
 
 	<name>Liquibase Integration with Bootique</name>
@@ -20,8 +20,8 @@
 
 	<properties>
 		<liquibase-version>3.5.3</liquibase-version>
-		<bootique-version>0.20</bootique-version>
-		<bootique-jdbc-version>0.12</bootique-jdbc-version>
+		<bootique-version>0.21-SNAPSHOT</bootique-version>
+		<bootique-jdbc-version>0.13-SNAPSHOT</bootique-jdbc-version>
 	</properties>
 
 	<scm>

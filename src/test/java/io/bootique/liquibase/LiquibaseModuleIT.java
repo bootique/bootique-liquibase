@@ -31,5 +31,17 @@ public class LiquibaseModuleIT {
         Object[] row = a.selectOne();
         assertEquals(1, row[0]);
         assertEquals("AA", row[1]);
+        assertEquals(1, a.getRowCount());
+        
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(1, a.getRowCount());
     }
 }

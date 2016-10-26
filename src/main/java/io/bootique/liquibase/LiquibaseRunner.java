@@ -1,7 +1,11 @@
 package io.bootique.liquibase;
 
 import io.bootique.liquibase.database.DerbyDatabase;
+import io.bootique.resource.ResourceFactory;
+import liquibase.ContextExpression;
 import liquibase.Liquibase;
+import liquibase.changelog.ChangeLogParameters;
+import liquibase.changelog.DatabaseChangeLog;
 import liquibase.database.Database;
 import liquibase.database.DatabaseConnection;
 import liquibase.database.DatabaseFactory;
@@ -9,7 +13,6 @@ import liquibase.database.jvm.JdbcConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.exception.LiquibaseException;
 import liquibase.logging.LogFactory;
-import liquibase.resource.ClassLoaderResourceAccessor;
 import liquibase.resource.ResourceAccessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,83 +20,97 @@ import org.slf4j.LoggerFactory;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.function.Function;
 
 public class LiquibaseRunner {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(LiquibaseRunner.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(LiquibaseRunner.class);
 
-	private DataSource dataSource;
-	private String changeLog;
-	private SLFLiquibaseAdapter loggerAdapter;
+    protected Collection<ResourceFactory> changeLogs;
+    protected DataSource dataSource;
+    private SLFLiquibaseAdapter loggerAdapter;
 
-	public LiquibaseRunner(String changeLog, DataSource dataSource) {
-		this.changeLog = changeLog;
-		this.dataSource = dataSource;
+    public LiquibaseRunner(Collection<ResourceFactory> changeLogs, DataSource dataSource) {
+        this.changeLogs = changeLogs;
+        this.dataSource = dataSource;
 
-		Logger lbLogger = LoggerFactory.getLogger(Liquibase.class);
-		this.loggerAdapter = new SLFLiquibaseAdapter(lbLogger);
+        Logger lbLogger = LoggerFactory.getLogger(Liquibase.class);
+        this.loggerAdapter = new SLFLiquibaseAdapter(lbLogger);
 
-		setupLogging();
-	}
+        setupLogging();
+    }
 
-	public <T> T runWithLiquibase(Function<Liquibase, T> op) {
+    public <T> T runWithLiquibase(Function<Liquibase, T> op) {
 
-		Liquibase lb = createLiquibase();
-		try {
-			return op.apply(lb);
-		} finally {
-			closeLiquibase(lb);
-		}
-	}
+        Liquibase lb = createLiquibase();
+        try {
+            return op.apply(lb);
+        } finally {
+            closeLiquibase(lb);
+        }
+    }
 
-	protected Liquibase createLiquibase() {
-		ResourceAccessor resourceAccessor = new ClassLoaderResourceAccessor();
-		try {
-			Database liquibaseDB = createDatabase(dataSource.getConnection(), resourceAccessor);
+    protected Liquibase createLiquibase() {
+        ResourceAccessor resourceAccessor = new ResourceFactoryAccessor();
 
-			// TODO: other LB settings?
+        try {
+            Database liquibaseDB = createDatabase(dataSource.getConnection(), resourceAccessor);
+            DatabaseChangeLog changeLog = createDatabaseChangeLog(liquibaseDB, resourceAccessor);
+            return new Liquibase(changeLog, resourceAccessor, liquibaseDB);
+        } catch (SQLException | LiquibaseException e) {
+            throw new RuntimeException("Error creating liquibase", e);
+        }
+    }
 
-			LOGGER.info("Change log: '{}'", changeLog);
+    protected void setupLogging() {
+        LogFactory.setInstance(new LogFactory() {
+            @Override
+            public liquibase.logging.Logger getLog(String name) {
+                return loggerAdapter;
+            }
+        });
+    }
 
-			return new Liquibase(changeLog, resourceAccessor, liquibaseDB);
-		} catch (SQLException | LiquibaseException e) {
-			throw new RuntimeException("Error creating liquibase", e);
-		}
-	}
+    protected DatabaseChangeLog createDatabaseChangeLog(Database database, ResourceAccessor resourceAccessor) {
+        DatabaseChangeLog changeLog = new DatabaseChangeLog();
+        changeLog.setChangeLogParameters(new ChangeLogParameters(database));
 
-	protected void setupLogging() {
-		LogFactory.setInstance(new LogFactory() {
-			@Override
-			public liquibase.logging.Logger getLog(String name) {
-				return loggerAdapter;
-			}
-		});
-	}
+        changeLogs.forEach(cl -> {
+            try {
+                LOGGER.info("Including change log: '{}'", cl.getResourceId());
+                changeLog.include(cl.getResourceId(), false, resourceAccessor, new ContextExpression());
+            } catch (LiquibaseException e) {
+                throw new RuntimeException("Error configuring Liquibase", e);
+            }
+        });
 
-	protected Database createDatabase(Connection c, ResourceAccessor resourceAccessor) throws DatabaseException {
+        return changeLog;
+    }
 
-		DatabaseConnection liquibaseConnection = new JdbcConnection(c);
-		DatabaseFactory databaseFactory = DatabaseFactory.getInstance();
+    protected Database createDatabase(Connection c, ResourceAccessor resourceAccessor) throws DatabaseException {
 
-		// expand factory with our extensions....
-		databaseFactory.register(new DerbyDatabase());
+        DatabaseConnection liquibaseConnection = new JdbcConnection(c);
+        DatabaseFactory databaseFactory = DatabaseFactory.getInstance();
 
-		Database database = databaseFactory.findCorrectDatabaseImplementation(liquibaseConnection);
+        // expand factory with our extensions....
+        databaseFactory.register(new DerbyDatabase());
 
-		// TODO: set default schema?
+        Database database = databaseFactory.findCorrectDatabaseImplementation(liquibaseConnection);
 
-		return database;
-	}
+        // TODO: set default schema?
 
-	protected void closeLiquibase(Liquibase lb) {
-		if (lb.getDatabase() != null) {
-			try {
-				lb.getDatabase().close();
-			} catch (DatabaseException e) {
-				LOGGER.info("Error closing Liquibase, ignored", e);
-			}
-		}
-	}
+        return database;
+    }
+
+    protected void closeLiquibase(Liquibase lb) {
+        if (lb.getDatabase() != null) {
+            try {
+                lb.getDatabase().close();
+            } catch (DatabaseException e) {
+                LOGGER.info("Error closing Liquibase, ignored", e);
+            }
+        }
+    }
 
 }

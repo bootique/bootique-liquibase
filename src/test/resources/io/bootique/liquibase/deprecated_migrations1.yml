@@ -6,5 +6,4 @@ jdbc:
 
 liquibase:
   datasource: test
-  changeLogs:
-    - classpath:io/bootique/liquibase/changeset1.sql
+  changeLog: io/bootique/liquibase/deprecated_changelog1.yml

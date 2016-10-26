@@ -1,0 +1,7 @@
+databaseChangeLog:
+  - include:
+      file: classpath:io/bootique/liquibase/changeset1.sql
+      relativeToChangelogFile: false
+  - include:
+      file: changeset2.sql
+      relativeToChangelogFile: true

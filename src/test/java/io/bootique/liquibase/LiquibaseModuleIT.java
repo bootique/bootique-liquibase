@@ -9,6 +9,8 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.util.Map;
+
 import static org.junit.Assert.assertEquals;
 
 public class LiquibaseModuleIT {
@@ -16,9 +18,43 @@ public class LiquibaseModuleIT {
     @Rule
     public final BQTestFactory testFactory = new BQTestFactory();
 
+    /**
+     * Testing deprecated 'changeSet' key.
+     *
+     * @deprecated since 0.11
+     */
     @Test
-    public void testMigration() {
+    @Deprecated
+    public void testLegacy_Migration() {
 
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/deprecated_migrations1.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
+        Object[] row = a.selectOne();
+        assertEquals(1, row[0]);
+        assertEquals("AA", row[1]);
+        assertEquals(1, a.getRowCount());
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/deprecated_migrations1.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(1, a.getRowCount());
+    }
+
+    @Test
+    public void testMigration_SingleSet() {
         BQTestRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u")
                 .autoLoadModules()
@@ -43,5 +79,73 @@ public class LiquibaseModuleIT {
         Assert.assertTrue(result.isSuccess());
 
         assertEquals(1, a.getRowCount());
+    }
+
+    @Test
+    public void testMigration_MultipleSets() {
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations2.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
+
+        Map<Object, Object[]> rowMap = a.selectAsMap("ID");
+
+        assertEquals(2, rowMap.size());
+
+        Object[] rowA = rowMap.get(1);
+        assertEquals("AA", rowA[1]);
+
+        Object[] rowB = rowMap.get(2);
+        assertEquals("BB", rowB[1]);
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations2.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(2, a.getRowCount());
+    }
+
+    @Test
+    public void testMigration_MultipleSetsViaYaml() {
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
+
+        Map<Object, Object[]> rowMap = a.selectAsMap("ID");
+
+        assertEquals(2, rowMap.size());
+
+        Object[] rowA = rowMap.get(1);
+        assertEquals("AA", rowA[1]);
+
+        Object[] rowB = rowMap.get(2);
+        assertEquals("BB", rowB[1]);
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(2, a.getRowCount());
     }
 }

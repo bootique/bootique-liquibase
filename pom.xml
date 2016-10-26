@@ -13,7 +13,7 @@
 	<version>0.11-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>Liquibase Integration with Bootique</name>
+	<name>bootique-liquibase: Liquibase Integration with Bootique</name>
 	<description>
 		Provides Liquibase integration with Bootique.
 	</description>

@@ -8,3 +8,4 @@ liquibase:
   datasource: test
   changeLogs:
     - classpath:io/bootique/liquibase/changeset1.sql
+    - classpath:io/bootique/liquibase/changeset2.sql

@@ -7,4 +7,4 @@ jdbc:
 liquibase:
   datasource: test
   changeLogs:
-    - classpath:io/bootique/liquibase/changeset1.sql
+    - classpath:io/bootique/liquibase/changelog_1_2.yml

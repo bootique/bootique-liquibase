@@ -34,11 +34,21 @@ public class LiquibaseModule extends ConfigModule {
     }
 
     @Provides
-    public LiquibaseRunner createRunner(ConfigurationFactory configFactory,
-                                        DataSourceFactory dataSourceFactory,
-                                        @ChangeLogs Set<ResourceFactory> injectedChangeLogs) {
+    @Singleton
+    ChangeLogMerger provideLogMerger() {
+        return new ChangeLogMerger();
+    }
+
+    @Provides
+    @Singleton
+    LiquibaseRunner provideRunner(ConfigurationFactory configFactory,
+                                  DataSourceFactory dataSourceFactory,
+                                  ChangeLogMerger changeLogMerger,
+                                  @ChangeLogs Set<ResourceFactory> injectedChangeLogs) {
+
         return configFactory
                 .config(LiquibaseFactory.class, configPrefix)
-                .createRunner(dataSourceFactory, injectedChangeLogs);
+                .createRunner(dataSourceFactory, configChangeLogs
+                        -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs));
     }
 }

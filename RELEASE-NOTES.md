@@ -3,6 +3,7 @@
 * #4 Replace 'changeLog' with 'changeLogs' and map Strings to ResourceFactory
 * #8 Upgrade to the latest Liquibase 3.5.3
 * #9 Upgrades to latest BQ, JDBC, LB
+* #10 Contributing change logs via DI
 
 ## 0.10
 

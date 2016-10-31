@@ -21,6 +21,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.Collection;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class LiquibaseRunner {
@@ -32,8 +33,8 @@ public class LiquibaseRunner {
     private SLFLiquibaseAdapter loggerAdapter;
 
     public LiquibaseRunner(Collection<ResourceFactory> changeLogs, DataSource dataSource) {
-        this.changeLogs = changeLogs;
-        this.dataSource = dataSource;
+        this.changeLogs = Objects.requireNonNull(changeLogs);
+        this.dataSource = Objects.requireNonNull(dataSource);
 
         Logger lbLogger = LoggerFactory.getLogger(Liquibase.class);
         this.loggerAdapter = new SLFLiquibaseAdapter(lbLogger);
@@ -87,6 +88,7 @@ public class LiquibaseRunner {
 
         return changeLog;
     }
+
 
     protected Database createDatabase(Connection c, ResourceAccessor resourceAccessor) throws DatabaseException {
 

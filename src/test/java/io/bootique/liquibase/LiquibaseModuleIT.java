@@ -3,6 +3,7 @@ package io.bootique.liquibase;
 import io.bootique.command.CommandOutcome;
 import io.bootique.jdbc.test.DatabaseChannel;
 import io.bootique.jdbc.test.Table;
+import io.bootique.resource.ResourceFactory;
 import io.bootique.test.BQTestRuntime;
 import io.bootique.test.junit.BQTestFactory;
 import org.junit.Assert;
@@ -120,6 +121,85 @@ public class LiquibaseModuleIT {
         BQTestRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
                 .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
+
+        Map<Object, Object[]> rowMap = a.selectAsMap("ID");
+
+        assertEquals(2, rowMap.size());
+
+        Object[] rowA = rowMap.get(1);
+        assertEquals("AA", rowA[1]);
+
+        Object[] rowB = rowMap.get(2);
+        assertEquals("BB", rowB[1]);
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(2, a.getRowCount());
+    }
+
+    @Test
+    public void testMigration_MultipleSetsContribution() {
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations4.yml", "-u")
+                .autoLoadModules()
+                .module(b -> {
+                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset1.sql"));
+                })
+                .module(b -> {
+                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset2.sql"));
+                })
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
+
+        Map<Object, Object[]> rowMap = a.selectAsMap("ID");
+
+        assertEquals(2, rowMap.size());
+
+        Object[] rowA = rowMap.get(1);
+        assertEquals("AA", rowA[1]);
+
+        Object[] rowB = rowMap.get(2);
+        assertEquals("BB", rowB[1]);
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(2, a.getRowCount());
+    }
+
+    @Test
+    public void testMigration_YamlOverridesDI() {
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
+                .autoLoadModules()
+                .module(b -> {
+                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset1.sql"));
+                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset2.sql"));
+                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset3.sql"));
+                })
                 .createRuntime();
 
         CommandOutcome result = runtime.run();

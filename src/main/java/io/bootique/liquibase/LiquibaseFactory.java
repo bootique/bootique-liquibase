@@ -7,7 +7,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Objects;
 
 public class LiquibaseFactory {
@@ -45,7 +44,7 @@ public class LiquibaseFactory {
         this.changeLog = changeLog;
     }
 
-    public LiquibaseRunner createRunner(DataSourceFactory dataSourceFactory) {
+    public LiquibaseRunner createRunner(DataSourceFactory dataSourceFactory, Collection<ResourceFactory> injectedChangeLogs) {
         Objects.requireNonNull(datasource, "'datasource' property is null");
         DataSource ds = dataSourceFactory.forName(datasource);
 
@@ -67,7 +66,13 @@ public class LiquibaseFactory {
 
 
 
-        return new LiquibaseRunner(changeLogs, ds);
+        return new LiquibaseRunner(changeLogs(injectedChangeLogs), ds);
+    }
+
+    protected Collection<ResourceFactory> changeLogs(Collection<ResourceFactory> injectedChangeLogs) {
+
+        // YAML changelogs completely override injected change logs
+        return this.changeLogs != null ? this.changeLogs : Objects.requireNonNull(injectedChangeLogs);
     }
 
 

@@ -1,7 +1,6 @@
 jdbc:
   test:
     url: jdbc:derby:target/derby/migrations1;create=true
-    driver: org.apache.derby.jdbc.EmbeddedDriver
     maxActive: 2
 
 liquibase:

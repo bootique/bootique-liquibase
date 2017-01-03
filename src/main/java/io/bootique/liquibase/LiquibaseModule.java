@@ -9,10 +9,13 @@ import io.bootique.ConfigModule;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.liquibase.annotation.ChangeLogs;
+import io.bootique.liquibase.command.ClearCheckSumsCommand;
 import io.bootique.liquibase.command.UpdateCommand;
 import io.bootique.resource.ResourceFactory;
 
 import java.util.Set;
+
+import static java.util.Arrays.asList;
 
 public class LiquibaseModule extends ConfigModule {
 
@@ -29,7 +32,8 @@ public class LiquibaseModule extends ConfigModule {
 
     @Override
     public void configure(Binder binder) {
-        BQCoreModule.contributeCommands(binder).addBinding().to(UpdateCommand.class).in(Singleton.class);
+        asList(UpdateCommand.class, ClearCheckSumsCommand.class).forEach(command ->
+                BQCoreModule.contributeCommands(binder).addBinding().to(command).in(Singleton.class));
         contributeChangeLogs(binder);
     }
 

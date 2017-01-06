@@ -9,8 +9,11 @@ import io.bootique.ConfigModule;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.liquibase.annotation.ChangeLogs;
+import io.bootique.liquibase.command.ChangelogSyncCommand;
+import io.bootique.liquibase.command.ChangelogSyncSqlCommand;
 import io.bootique.liquibase.command.ClearCheckSumsCommand;
 import io.bootique.liquibase.command.UpdateCommand;
+import io.bootique.liquibase.command.ValidateCommand;
 import io.bootique.resource.ResourceFactory;
 
 import java.util.Set;
@@ -32,7 +35,13 @@ public class LiquibaseModule extends ConfigModule {
 
     @Override
     public void configure(Binder binder) {
-        asList(UpdateCommand.class, ClearCheckSumsCommand.class).forEach(command ->
+        asList(
+                UpdateCommand.class,
+                ValidateCommand.class,
+                ChangelogSyncCommand.class,
+                ClearCheckSumsCommand.class,
+                ChangelogSyncSqlCommand.class
+        ).forEach(command ->
                 BQCoreModule.contributeCommands(binder).addBinding().to(command).in(Singleton.class));
         contributeChangeLogs(binder);
     }

@@ -4,6 +4,7 @@
 * #8 Upgrade to the latest Liquibase 3.5.3
 * #9 Upgrades to latest BQ, JDBC, LB
 * #10 Contributing change logs via DI
+* #11 Add liquibase:clearCheckSums command.
 
 ## 0.10
 

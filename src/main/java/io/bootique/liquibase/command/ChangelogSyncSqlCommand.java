@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
 
+/**
+ * @since 0.11
+ */
 public class ChangelogSyncSqlCommand extends CommandWithMetadata {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangelogSyncSqlCommand.class);

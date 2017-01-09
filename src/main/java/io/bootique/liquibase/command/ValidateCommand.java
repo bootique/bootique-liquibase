@@ -10,6 +10,9 @@ import io.bootique.meta.application.CommandMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * @since 0.11
+ */
 public class ValidateCommand extends CommandWithMetadata {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ValidateCommand.class);

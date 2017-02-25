@@ -1,3 +1,7 @@
+## 0.12
+
+* #12 Upgrade to Bootique 0.22, replace contribution API with "extend", document config
+
 ## 0.11
 
 * #4 Replace 'changeLog' with 'changeLogs' and map Strings to ResourceFactory

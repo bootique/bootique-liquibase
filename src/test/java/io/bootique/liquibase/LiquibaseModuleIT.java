@@ -3,7 +3,6 @@ package io.bootique.liquibase;
 import io.bootique.command.CommandOutcome;
 import io.bootique.jdbc.test.DatabaseChannel;
 import io.bootique.jdbc.test.Table;
-import io.bootique.resource.ResourceFactory;
 import io.bootique.test.BQTestRuntime;
 import io.bootique.test.junit.BQTestFactory;
 import org.junit.Assert;
@@ -155,12 +154,9 @@ public class LiquibaseModuleIT {
         BQTestRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations4.yml", "-u")
                 .autoLoadModules()
-                .module(b -> {
-                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset1.sql"));
-                })
-                .module(b -> {
-                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset2.sql"));
-                })
+                .module(b -> LiquibaseModule.extend(b)
+                        .addChangeLog("classpath:io/bootique/liquibase/changeset1.sql")
+                        .addChangeLog("classpath:io/bootique/liquibase/changeset2.sql"))
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
@@ -195,11 +191,10 @@ public class LiquibaseModuleIT {
         BQTestRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
                 .autoLoadModules()
-                .module(b -> {
-                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset1.sql"));
-                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset2.sql"));
-                    LiquibaseModule.contributeChangeLogs(b).addBinding().toInstance(new ResourceFactory("classpath:io/bootique/liquibase/changeset3.sql"));
-                })
+                .module(b -> LiquibaseModule.extend(b)
+                        .addChangeLog("classpath:io/bootique/liquibase/changeset1.sql")
+                        .addChangeLog("classpath:io/bootique/liquibase/changeset2.sql")
+                        .addChangeLog("classpath:io/bootique/liquibase/changeset3.sql"))
                 .createRuntime();
 
         CommandOutcome result = runtime.run();

@@ -1,5 +1,7 @@
 package io.bootique.liquibase;
 
+import io.bootique.annotation.BQConfig;
+import io.bootique.annotation.BQConfigProperty;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.resource.ResourceFactory;
 import org.slf4j.Logger;
@@ -10,6 +12,7 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.function.Function;
 
+@BQConfig("Configures Liquibase migrations.")
 public class LiquibaseFactory {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(LiquibaseFactory.class);
@@ -21,6 +24,7 @@ public class LiquibaseFactory {
 
     private Collection<ResourceFactory> changeLogs;
 
+    @BQConfigProperty("DataSource name defined under 'jdbc' that should be used for migrations execution.")
     public void setDatasource(String datasource) {
         this.datasource = datasource;
     }
@@ -31,6 +35,7 @@ public class LiquibaseFactory {
      * @param changeLogs
      * @since 0.11
      */
+    @BQConfigProperty
     public void setChangeLogs(Collection<ResourceFactory> changeLogs) {
         this.changeLogs = changeLogs;
     }
@@ -71,8 +76,4 @@ public class LiquibaseFactory {
         Collection<ResourceFactory> allChangeLogs = changeLogMerger.apply(changeLogs);
         return new LiquibaseRunner(allChangeLogs, ds);
     }
-
-
-
-
 }

@@ -9,6 +9,9 @@ import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.SQLException;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -223,4 +226,22 @@ public class LiquibaseModuleIT {
 
         assertEquals(2, a.getRowCount());
     }
+
+    @Test
+    public void testDefaultDataSource() throws SQLException {
+
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/noconfig.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        try (Connection c = DatabaseChannel.get(runtime).getConnection();) {
+            DatabaseMetaData md = c.getMetaData();
+            assertEquals("jdbc:derby:target/derby/bqjdbc_noconfig", md.getURL());
+        }
+    }
+
 }

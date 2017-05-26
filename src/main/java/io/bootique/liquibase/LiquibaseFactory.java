@@ -9,7 +9,6 @@ import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Collection;
-import java.util.Objects;
 import java.util.function.Function;
 
 @BQConfig("Configures Liquibase migrations.")
@@ -52,10 +51,7 @@ public class LiquibaseFactory {
 
     public LiquibaseRunner createRunner(DataSourceFactory dataSourceFactory,
                                         Function<Collection<ResourceFactory>, Collection<ResourceFactory>> changeLogMerger) {
-
-        Objects.requireNonNull(datasource, "'datasource' property is null");
-        DataSource ds = dataSourceFactory.forName(datasource);
-
+        DataSource ds = getDataSource(dataSourceFactory);
 
         if (changeLog != null) {
 
@@ -75,5 +71,32 @@ public class LiquibaseFactory {
 
         Collection<ResourceFactory> allChangeLogs = changeLogMerger.apply(changeLogs);
         return new LiquibaseRunner(allChangeLogs, ds);
+    }
+
+    private DataSource getDataSource(DataSourceFactory dataSourceFactory) {
+        Collection<String> allNames = dataSourceFactory.allNames();
+
+        if (datasource == null) {
+            if (allNames.isEmpty()) {
+                throw new IllegalStateException("No DataSources are available for Liquibase. " +
+                        "Add a DataSource via 'bootique-jdbc'or 'bootique-liquibase'");
+            }
+
+            if (allNames.size() == 1) {
+                return dataSourceFactory.forName(allNames.iterator().next());
+            } else {
+                throw new IllegalStateException(
+                        String.format("Can't map Liquibase DataSource: 'liquibase.datasource' is missing. " +
+                                "Available DataSources are %s", allNames));
+            }
+        } else {
+            if (!allNames.contains(datasource)) {
+                throw new IllegalStateException(
+                        String.format("Can't map Liquibase DataSource: 'liquibase.datasource' is set to '%s'. " +
+                                "Available DataSources: %s", datasource, allNames));
+            }
+
+            return dataSourceFactory.forName(datasource);
+        }
     }
 }

@@ -74,7 +74,6 @@ public class LiquibaseFactory {
     }
 
     private DataSource getDataSource(DataSourceFactory dataSourceFactory) {
-        DataSource ds;
         Collection<String> allNames = dataSourceFactory.allNames();
 
         if (datasource == null) {

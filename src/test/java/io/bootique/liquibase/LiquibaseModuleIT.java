@@ -227,7 +227,6 @@ public class LiquibaseModuleIT {
         assertEquals(2, a.getRowCount());
     }
 
-
     @Test
     public void testDefaultDataSource() throws SQLException {
 
@@ -238,8 +237,6 @@ public class LiquibaseModuleIT {
 
         CommandOutcome result = runtime.run();
         Assert.assertTrue(result.isSuccess());
-
-        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
 
         try (Connection c = DatabaseChannel.get(runtime).getConnection();) {
             DatabaseMetaData md = c.getMetaData();

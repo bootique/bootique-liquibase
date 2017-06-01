@@ -10,6 +10,7 @@ import io.bootique.config.ConfigurationFactory;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.liquibase.command.ChangelogSyncCommand;
+import io.bootique.liquibase.command.ChangelogSyncSqlCommand;
 import io.bootique.liquibase.command.ClearCheckSumsCommand;
 import io.bootique.liquibase.command.UpdateCommand;
 import io.bootique.liquibase.command.ValidateCommand;
@@ -56,7 +57,7 @@ public class LiquibaseModule extends ConfigModule {
         BQCoreModule.extend(binder)
                 .addCommand(UpdateCommand.class)
                 .addCommand(ValidateCommand.class)
-                .addCommand(ChangelogSyncCommand.class)
+                .addCommand(ChangelogSyncSqlCommand.class)
                 .addCommand(ClearCheckSumsCommand.class)
                 .addCommand(ChangelogSyncCommand.class);
     }

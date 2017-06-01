@@ -1,3 +1,7 @@
+## 0.13
+
+* #7 Guess default DataSource if only one DataSource is available
+
 ## 0.12
 
 * #12 Upgrade to Bootique 0.22, replace contribution API with "extend", document config

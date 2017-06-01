@@ -1,3 +1,7 @@
+## 0.13
+
+* #14 ChangelogSyncSqlCommand got lost
+
 ## 0.12
 
 * #12 Upgrade to Bootique 0.22, replace contribution API with "extend", document config

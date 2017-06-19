@@ -24,7 +24,9 @@ public class ChangelogSyncCommand extends CommandWithMetadata {
     @Inject
     public ChangelogSyncCommand(Provider<LiquibaseRunner> runnerProvider) {
         super(CommandMetadata.builder(ChangelogSyncCommand.class)
-                .description("Mark all changes as executed in the database.").build());
+                .name("lb-changelog-sync")
+                .description("Mark all changes as executed in the database.")
+                .build());
         this.runnerProvider = runnerProvider;
     }
 

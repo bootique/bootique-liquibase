@@ -21,7 +21,11 @@ public class UpdateCommand extends CommandWithMetadata {
 
 	@Inject
 	public UpdateCommand(Provider<LiquibaseRunner> runnerProvider) {
-		super(CommandMetadata.builder(UpdateCommand.class).description("Updates DB with available migrations").build());
+		super(CommandMetadata.builder(UpdateCommand.class)
+				.name("lb-update")
+				.shortName('u')
+				.description("Updates DB with available migrations")
+				.build());
 		this.runnerProvider = runnerProvider;
 	}
 

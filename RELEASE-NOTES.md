@@ -2,6 +2,7 @@
 
 * #7 Guess default DataSource if only one DataSource is available
 * #14 ChangelogSyncSqlCommand got lost
+* #16 Namespace the commands 
 
 ## 0.12
 

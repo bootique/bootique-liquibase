@@ -22,7 +22,10 @@ public class ValidateCommand extends CommandWithMetadata {
     @Inject
     public ValidateCommand(Provider<LiquibaseRunner> runnerProvider) {
         super(CommandMetadata.builder(ValidateCommand.class)
-                .description("Checks the changelog for errors.").build());
+                .name("lb-validate")
+                .shortName('v')
+                .description("Checks the changelog for errors.")
+                .build());
         this.runnerProvider = runnerProvider;
     }
 

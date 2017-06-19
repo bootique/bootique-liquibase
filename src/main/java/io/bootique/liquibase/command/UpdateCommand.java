@@ -2,11 +2,12 @@ package io.bootique.liquibase.command;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import io.bootique.meta.application.CommandMetadata;
 import io.bootique.cli.Cli;
 import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
+import io.bootique.liquibase.LiquibaseModule;
 import io.bootique.liquibase.LiquibaseRunner;
+import io.bootique.meta.application.CommandMetadata;
 import liquibase.Contexts;
 import liquibase.LabelExpression;
 import org.slf4j.Logger;
@@ -32,7 +33,9 @@ public class UpdateCommand extends CommandWithMetadata {
 
 		return runnerProvider.get().runWithLiquibase(lb -> {
 			try {
-				lb.update(new Contexts(), new LabelExpression());
+				String option = cli.optionString(LiquibaseModule.CONTEXT_OPTION);
+				lb.update(option == null ? new Contexts() : new Contexts(option), new LabelExpression());
+
 				return CommandOutcome.succeeded();
 			} catch (Exception e) {
 				return CommandOutcome.failed(1, e);

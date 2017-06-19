@@ -1,0 +1,9 @@
+jdbc:
+  test:
+    url: jdbc:derby:target/derby/migrations1;create=true
+    maxActive: 1
+
+liquibase:
+  datasource: test
+  changeLogs:
+    - classpath:io/bootique/liquibase/changelog1.xml

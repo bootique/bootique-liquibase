@@ -12,6 +12,7 @@ import org.junit.Test;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
@@ -244,4 +245,35 @@ public class LiquibaseModuleIT {
         }
     }
 
+
+    @Test
+    public void testMigration_Context() throws SQLException {
+
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-l", "test")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
+        List<Object[]> rows = a.select();
+        assertEquals("2", rows.get(0)[0]);
+        assertEquals("3", rows.get(1)[0]);
+        assertEquals("Test", rows.get(0)[1]);
+        assertEquals("Common", rows.get(1)[1]);
+        assertEquals(2, a.getRowCount());
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-l", "test")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(2, a.getRowCount());
+    }
 }

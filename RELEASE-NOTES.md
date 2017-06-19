@@ -2,6 +2,7 @@
 
 * #7 Guess default DataSource if only one DataSource is available
 * #14 ChangelogSyncSqlCommand got lost
+* #18 Add Liquibase context to control which changeSets will be executed in migration run 
 
 ## 0.12
 

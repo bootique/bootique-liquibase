@@ -248,32 +248,98 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_Context() throws SQLException {
-
         BQTestRuntime runtime = testFactory
-                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-l", "test")
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "test", "-x", "prod")
                 .autoLoadModules()
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
         Assert.assertTrue(result.isSuccess());
 
-        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
         List<Object[]> rows = a.select();
-        assertEquals("2", rows.get(0)[0]);
-        assertEquals("3", rows.get(1)[0]);
-        assertEquals("Test", rows.get(0)[1]);
-        assertEquals("Common", rows.get(1)[1]);
-        assertEquals(2, a.getRowCount());
+        assertEquals("1", rows.get(0)[0]);
+        assertEquals("2", rows.get(1)[0]);
+        assertEquals("3", rows.get(2)[0]);
+        assertEquals("4", rows.get(3)[0]);
+        assertEquals("5", rows.get(4)[0]);
+
+        assertEquals("prod", rows.get(0)[1]);
+        assertEquals("test", rows.get(1)[1]);
+        assertEquals("no context", rows.get(2)[1]);
+        assertEquals("test and prod", rows.get(3)[1]);
+        assertEquals("test or prod", rows.get(4)[1]);
+
+        assertEquals(5, a.getRowCount());
 
         // rerun....
         runtime = testFactory
-                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-l", "test")
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "test", "-x", "prod")
                 .autoLoadModules()
                 .createRuntime();
 
         result = runtime.run();
         Assert.assertTrue(result.isSuccess());
 
-        assertEquals(2, a.getRowCount());
+        assertEquals(5, a.getRowCount());
+    }
+
+    @Test
+    public void testMigration_NoContext() throws SQLException {
+        //not specify a context when you run the migrator, ALL contexts will be run
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
+        assertEquals(7, a.getRowCount());
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(7, a.getRowCount());
+    }
+
+    @Test
+    public void testMigration_UnknownContext() throws SQLException {
+        BQTestRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "unknown")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
+        assertEquals(3, a.getRowCount());
+        List<Object[]> rows = a.select();
+        assertEquals("3", rows.get(0)[0]);
+        assertEquals("6", rows.get(1)[0]);
+        assertEquals("7", rows.get(2)[0]);
+
+        assertEquals("no context", rows.get(0)[1]);
+        assertEquals("!test", rows.get(1)[1]);
+        assertEquals("!test and !prod", rows.get(2)[1]);
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "unknown")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        Assert.assertTrue(result.isSuccess());
+
+        assertEquals(3, a.getRowCount());
     }
 }

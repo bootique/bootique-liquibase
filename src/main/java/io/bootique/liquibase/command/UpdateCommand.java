@@ -13,6 +13,8 @@ import liquibase.LabelExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 
 public class UpdateCommand extends CommandWithMetadata {
 
@@ -33,8 +35,8 @@ public class UpdateCommand extends CommandWithMetadata {
 
 		return runnerProvider.get().runWithLiquibase(lb -> {
 			try {
-				String option = cli.optionString(LiquibaseModule.CONTEXT_OPTION);
-				lb.update(option == null ? new Contexts() : new Contexts(option), new LabelExpression());
+				List<String> options = cli.optionStrings(LiquibaseModule.CONTEXT_OPTION);
+				lb.update(options == null ? new Contexts() : new Contexts(options.toArray(new String[options.size()])), new LabelExpression());
 
 				return CommandOutcome.succeeded();
 			} catch (Exception e) {

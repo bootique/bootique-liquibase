@@ -11,8 +11,8 @@
             <column name="ID" type="java.sql.Types.VARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
-            <column name="NAME" type="java.sql.Types.VARCHAR(32)"></column>
-            <column name="ORDER" type="java.sql.Types.INTEGER"></column>
+            <column name="CONTEXT" type="java.sql.Types.VARCHAR(32)"
+                    remarks="Сontext which a changeset is marked"></column>
         </createTable>
     </changeSet>
 
@@ -23,22 +23,50 @@
     <changeSet id="insert_a_prod" author="unknown" context="prod">
         <insert tableName="A">
             <column name="ID" value="1"></column>
-            <column name="NAME" value="Prod"></column>
-            <column name="ORDER" valueNumeric="1"/>
+            <column name="CONTEXT" value="prod"></column>
         </insert>
     </changeSet>
+
     <changeSet id="insert_a_test" author="unknown" context="test">
         <insert tableName="A">
             <column name="ID" value="2"></column>
-            <column name="NAME" value="Test"></column>
-            <column name="ORDER" valueNumeric="2"/>
+            <column name="CONTEXT" value="test"></column>
         </insert>
     </changeSet>
+
+    <!--A context isn't assigned to the changeSet, it will run all the time, regardless of what contexts passed in to the migrator-->
     <changeSet id="insert_a_common" author="unknown">
         <insert tableName="A">
             <column name="ID" value="3"></column>
-            <column name="NAME" value="Common"></column>
-            <column name="ORDER" valueNumeric="3"/>
+            <column name="CONTEXT" value="no context"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_a_test_and_prod" author="unknown" context="test and prod">
+        <insert tableName="A">
+            <column name="ID" value="4"></column>
+            <column name="CONTEXT" value="test and prod"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_a_test_or_prod" author="unknown" context="test or prod">
+        <insert tableName="A">
+            <column name="ID" value="5"></column>
+            <column name="CONTEXT" value="test or prod"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_a_not_test" author="unknown" context="!test">
+        <insert tableName="A">
+            <column name="ID" value="6"></column>
+            <column name="CONTEXT" value="!test"></column>
+        </insert>
+    </changeSet>
+
+    <changeSet id="insert_a_not_test_and_not_prod" author="unknown" context="!test and !prod">
+        <insert tableName="A">
+            <column name="ID" value="7"></column>
+            <column name="CONTEXT" value="!test and !prod"></column>
         </insert>
     </changeSet>
 

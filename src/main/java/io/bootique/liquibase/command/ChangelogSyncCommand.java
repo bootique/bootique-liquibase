@@ -13,6 +13,8 @@ import liquibase.LabelExpression;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * @since 0.11
  */
@@ -36,8 +38,8 @@ public class ChangelogSyncCommand extends CommandWithMetadata {
 
         return runnerProvider.get().runWithLiquibase(lb -> {
             try {
-                String option = cli.optionString(LiquibaseModule.CONTEXT_OPTION);
-                lb.changeLogSync(option == null ? new Contexts() : new Contexts(option), new LabelExpression());
+                List<String> options = cli.optionStrings(LiquibaseModule.CONTEXT_OPTION);
+                lb.changeLogSync(options == null ? new Contexts() : new Contexts(options.toArray(new String[options.size()])), new LabelExpression());
 
                 return CommandOutcome.succeeded();
             } catch (Exception e) {

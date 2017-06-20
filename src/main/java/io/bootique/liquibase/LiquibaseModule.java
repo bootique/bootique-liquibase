@@ -62,14 +62,14 @@ public class LiquibaseModule extends ConfigModule {
                 .addCommand(ChangelogSyncSqlCommand.class)
                 .addCommand(ClearCheckSumsCommand.class)
                 .addCommand(ChangelogSyncCommand.class)
-                .addOption(createContexOption());
+                .addOption(createContextOption());
     }
 
-    OptionMetadata createContexOption() {
+    OptionMetadata createContextOption() {
         return OptionMetadata
                 .builder(CONTEXT_OPTION,
                         "Specifies Liquibase context to control which changeSets will be executed in migration run")
-                .shortName('l')
+                .shortName('x')
                 .valueOptional()
                 .build();
     }

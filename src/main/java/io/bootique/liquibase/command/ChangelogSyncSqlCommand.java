@@ -27,7 +27,9 @@ public class ChangelogSyncSqlCommand extends CommandWithMetadata {
     @Inject
     public ChangelogSyncSqlCommand(Provider<LiquibaseRunner> runnerProvider) {
         super(CommandMetadata.builder(ChangelogSyncSqlCommand.class)
-                .description("Writes SQL to mark all changes as executed in the database to STDOUT.").build());
+                .name("lb-changelog-sync-sql")
+                .description("Writes SQL to mark all changes as executed in the database to STDOUT.")
+                .build());
         this.runnerProvider = runnerProvider;
     }
 

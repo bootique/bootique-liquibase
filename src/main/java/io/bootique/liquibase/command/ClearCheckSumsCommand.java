@@ -22,6 +22,7 @@ public class ClearCheckSumsCommand extends CommandWithMetadata {
     public ClearCheckSumsCommand(Provider<LiquibaseRunner> runnerProvider) {
         super(CommandMetadata
                 .builder(ClearCheckSumsCommand.class)
+                .name("lb-clear-check-sums")
                 .description("Clears all checksums in the current changelog, so they will be recalculated next update.")
                 .build());
         this.runnerProvider = runnerProvider;

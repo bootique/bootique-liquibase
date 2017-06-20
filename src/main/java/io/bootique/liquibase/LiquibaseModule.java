@@ -14,11 +14,13 @@ import io.bootique.liquibase.command.ChangelogSyncSqlCommand;
 import io.bootique.liquibase.command.ClearCheckSumsCommand;
 import io.bootique.liquibase.command.UpdateCommand;
 import io.bootique.liquibase.command.ValidateCommand;
+import io.bootique.meta.application.OptionMetadata;
 import io.bootique.resource.ResourceFactory;
 
 import java.util.Set;
 
 public class LiquibaseModule extends ConfigModule {
+    public static final String CONTEXT_OPTION = "lb-context";
 
     public LiquibaseModule(String configPrefix) {
         super(configPrefix);
@@ -59,7 +61,17 @@ public class LiquibaseModule extends ConfigModule {
                 .addCommand(ValidateCommand.class)
                 .addCommand(ChangelogSyncSqlCommand.class)
                 .addCommand(ClearCheckSumsCommand.class)
-                .addCommand(ChangelogSyncCommand.class);
+                .addCommand(ChangelogSyncCommand.class)
+                .addOption(createContextOption());
+    }
+
+    OptionMetadata createContextOption() {
+        return OptionMetadata
+                .builder(CONTEXT_OPTION,
+                        "Specifies Liquibase context to control which changeSets will be executed in migration run")
+                .shortName('x')
+                .valueOptional()
+                .build();
     }
 
     @Provides

@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import io.bootique.cli.Cli;
 import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
+import io.bootique.liquibase.LiquibaseModule;
 import io.bootique.liquibase.LiquibaseRunner;
 import io.bootique.meta.application.CommandMetadata;
 import liquibase.Contexts;
@@ -14,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.BufferedWriter;
 import java.io.OutputStreamWriter;
+import java.util.List;
 
 /**
  * @since 0.11
@@ -40,8 +42,10 @@ public class ChangelogSyncSqlCommand extends CommandWithMetadata {
 
         return runnerProvider.get().runWithLiquibase(lb -> {
             try {
-                lb.changeLogSync(new Contexts(), new LabelExpression(),
+                List<String> options = cli.optionStrings(LiquibaseModule.CONTEXT_OPTION);
+                lb.changeLogSync(options == null ? new Contexts() : new Contexts(options.toArray(new String[options.size()])), new LabelExpression(),
                         new BufferedWriter(new OutputStreamWriter(System.out)));
+
                 return CommandOutcome.succeeded();
             } catch (Exception e) {
                 return CommandOutcome.failed(1, e);

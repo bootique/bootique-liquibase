@@ -4,7 +4,7 @@
 * #14 ChangelogSyncSqlCommand got lost
 * #16 Namespace the commands 
 * #18 Add Liquibase context to control which changeSets will be executed in migration run 
-* #15 Add "delete-all" command
+* #15 Add "drop-all" command
 
 ## 0.12
 

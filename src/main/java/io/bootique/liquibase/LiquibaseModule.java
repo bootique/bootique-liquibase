@@ -12,6 +12,7 @@ import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.liquibase.command.ChangelogSyncCommand;
 import io.bootique.liquibase.command.ChangelogSyncSqlCommand;
 import io.bootique.liquibase.command.ClearCheckSumsCommand;
+import io.bootique.liquibase.command.DropAllCommand;
 import io.bootique.liquibase.command.UpdateCommand;
 import io.bootique.liquibase.command.ValidateCommand;
 import io.bootique.meta.application.OptionMetadata;
@@ -62,6 +63,7 @@ public class LiquibaseModule extends ConfigModule {
                 .addCommand(ChangelogSyncSqlCommand.class)
                 .addCommand(ClearCheckSumsCommand.class)
                 .addCommand(ChangelogSyncCommand.class)
+                .addCommand(DropAllCommand.class)
                 .addOption(createContextOption());
     }
 

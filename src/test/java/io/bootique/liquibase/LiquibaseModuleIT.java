@@ -1,9 +1,9 @@
 package io.bootique.liquibase;
 
+import io.bootique.BQRuntime;
 import io.bootique.command.CommandOutcome;
 import io.bootique.jdbc.test.DatabaseChannel;
 import io.bootique.jdbc.test.Table;
-import io.bootique.test.BQTestRuntime;
 import io.bootique.test.junit.BQTestFactory;
 import org.junit.Assert;
 import org.junit.Rule;
@@ -31,7 +31,7 @@ public class LiquibaseModuleIT {
     @Deprecated
     public void testLegacy_Migration() {
 
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/deprecated_migrations1.yml", "-u")
                 .autoLoadModules()
                 .createRuntime();
@@ -59,7 +59,7 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_SingleSet() {
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u")
                 .autoLoadModules()
                 .createRuntime();
@@ -87,7 +87,7 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_MultipleSets() {
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations2.yml", "-u")
                 .autoLoadModules()
                 .createRuntime();
@@ -121,7 +121,7 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_MultipleSetsViaYaml() {
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
                 .autoLoadModules()
                 .createRuntime();
@@ -155,7 +155,7 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_MultipleSetsContribution() {
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations4.yml", "-u")
                 .autoLoadModules()
                 .module(b -> LiquibaseModule.extend(b)
@@ -192,7 +192,7 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_YamlOverridesDI() {
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u")
                 .autoLoadModules()
                 .module(b -> LiquibaseModule.extend(b)
@@ -231,7 +231,7 @@ public class LiquibaseModuleIT {
     @Test
     public void testDefaultDataSource() throws SQLException {
 
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/noconfig.yml", "-u")
                 .autoLoadModules()
                 .createRuntime();
@@ -248,7 +248,7 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_Context() throws SQLException {
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "test", "-x", "prod")
                 .autoLoadModules()
                 .createRuntime();
@@ -287,7 +287,7 @@ public class LiquibaseModuleIT {
     @Test
     public void testMigration_NoContext() throws SQLException {
         //not specify a context when you run the migrator, ALL contexts will be run
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u")
                 .autoLoadModules()
                 .createRuntime();
@@ -312,7 +312,7 @@ public class LiquibaseModuleIT {
 
     @Test
     public void testMigration_UnknownContext() throws SQLException {
-        BQTestRuntime runtime = testFactory
+        BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "unknown")
                 .autoLoadModules()
                 .createRuntime();

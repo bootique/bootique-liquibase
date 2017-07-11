@@ -5,6 +5,7 @@
 * #16 Namespace the commands 
 * #18 Add Liquibase context to control which changeSets will be executed in migration run 
 * #15 Add "drop-all" command
+* #23 Upgrade to BQ 0.23 
 
 ## 0.12
 

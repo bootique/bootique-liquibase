@@ -21,7 +21,6 @@
 	<properties>
 		<liquibase-version>3.5.3</liquibase-version>
 		<bootique-version>${project.version}</bootique-version>
-		<bootique-jdbc-version>${project.version}</bootique-jdbc-version>
 	</properties>
 
 	<scm>
@@ -58,12 +57,12 @@
 			<dependency>
 				<groupId>io.bootique.jdbc</groupId>
 				<artifactId>bootique-jdbc</artifactId>
-				<version>${bootique-jdbc-version}</version>
+				<version>${bootique-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.bootique.jdbc</groupId>
 				<artifactId>bootique-jdbc-test</artifactId>
-				<version>${bootique-jdbc-version}</version>
+				<version>${bootique-version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.slf4j</groupId>

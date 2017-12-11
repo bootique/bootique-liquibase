@@ -1,5 +1,6 @@
 package io.bootique.liquibase;
 
+import io.bootique.cli.Cli;
 import liquibase.Liquibase;
 import liquibase.database.Database;
 import liquibase.exception.LiquibaseException;
@@ -23,8 +24,10 @@ public class LegacyLiquibaseRunner extends LiquibaseRunner {
 
     private String changeLog;
 
-    public LegacyLiquibaseRunner(String changeLog, DataSource dataSource) {
-        super(Collections.emptyList(), dataSource);
+    public LegacyLiquibaseRunner(String changeLog,
+                                 DataSource dataSource,
+                                 Cli cli) {
+        super(Collections.emptyList(), dataSource, cli);
         this.changeLog = changeLog;
     }
 

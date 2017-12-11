@@ -5,17 +5,19 @@ import io.bootique.command.CommandOutcome;
 import io.bootique.jdbc.test.DatabaseChannel;
 import io.bootique.jdbc.test.Table;
 import io.bootique.test.junit.BQTestFactory;
-import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.SQLException;
+import java.sql.SQLSyntaxErrorException;
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 public class LiquibaseModuleIT {
 
@@ -37,7 +39,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
         Object[] row = a.selectOne();
@@ -52,7 +54,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(1, a.getRowCount());
     }
@@ -60,12 +62,12 @@ public class LiquibaseModuleIT {
     @Test
     public void testMigration_SingleSet() {
         BQRuntime runtime = testFactory
-                .app("-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u")
+                .app("-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u", "-d", "target/derby/migrations1")
                 .autoLoadModules()
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
         Object[] row = a.selectOne();
@@ -75,12 +77,12 @@ public class LiquibaseModuleIT {
 
         // rerun....
         runtime = testFactory
-                .app("-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u")
+                .app("-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u", "-d", "target/derby/migrations1")
                 .autoLoadModules()
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(1, a.getRowCount());
     }
@@ -93,7 +95,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
 
@@ -114,7 +116,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(2, a.getRowCount());
     }
@@ -127,7 +129,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
 
@@ -148,7 +150,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(2, a.getRowCount());
     }
@@ -164,7 +166,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
 
@@ -185,7 +187,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(2, a.getRowCount());
     }
@@ -202,7 +204,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
 
@@ -223,7 +225,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(2, a.getRowCount());
     }
@@ -237,7 +239,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         try (Connection c = DatabaseChannel.get(runtime).getConnection();) {
             DatabaseMetaData md = c.getMetaData();
@@ -254,7 +256,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
         List<Object[]> rows = a.select();
@@ -279,7 +281,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(5, a.getRowCount());
     }
@@ -293,7 +295,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
         assertEquals(7, a.getRowCount());
@@ -305,7 +307,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(7, a.getRowCount());
     }
@@ -318,7 +320,7 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         CommandOutcome result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
         assertEquals(3, a.getRowCount());
@@ -338,8 +340,61 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         result = runtime.run();
-        Assert.assertTrue(result.isSuccess());
+        assertTrue(result.isSuccess());
 
         assertEquals(3, a.getRowCount());
     }
+
+    @Test
+    public void testMigration_Schema() {
+        BQRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_schema.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        CommandOutcome result = runtime.run();
+        assertTrue(result.isSuccess());
+
+        Table y = DatabaseChannel.get(runtime).newTable("Y").columnNames("ID", "SCHEMA").build();
+        Object[] row = y.selectOne();
+        assertEquals("1", row[0]);
+        assertEquals("APP", row[1]);
+        assertEquals(1, y.getRowCount());
+
+        Table x = DatabaseChannel.get(runtime).newTable("X").columnNames("ID", "SCHEMA").build();
+        try {
+            x.selectOne();
+            fail("Exception expected");
+        } catch (Exception e) {
+            assertTrue(e.getCause() instanceof SQLSyntaxErrorException);
+        }
+
+        // rerun....
+        runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_schema.yml", "-u")
+                .autoLoadModules()
+                .createRuntime();
+
+        result = runtime.run();
+        assertTrue(result.isSuccess());
+
+        assertEquals(1, y.getRowCount());
+    }
+
+    @Test
+    public void testMigration_DefaultSchema() {
+        BQRuntime runtime = testFactory
+                .app("-c", "classpath:io/bootique/liquibase/migration_schema.yml", "-u", "-d", "test")
+                .autoLoadModules()
+                .createRuntime();
+
+        LiquibaseRunner runner = runtime.getInstance(LiquibaseRunner.class);
+        runner.runWithLiquibase(lb -> {
+            assertEquals("TEST", lb.getDatabase().getDefaultSchemaName());
+            assertEquals("TEST", lb.getDatabase().getLiquibaseSchemaName());
+
+            return lb;
+        });
+    }
+
 }

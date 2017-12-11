@@ -2,6 +2,7 @@ package io.bootique.liquibase;
 
 import io.bootique.annotation.BQConfig;
 import io.bootique.annotation.BQConfigProperty;
+import io.bootique.cli.Cli;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.resource.ResourceFactory;
 import org.slf4j.Logger;
@@ -50,7 +51,9 @@ public class LiquibaseFactory {
     }
 
     public LiquibaseRunner createRunner(DataSourceFactory dataSourceFactory,
-                                        Function<Collection<ResourceFactory>, Collection<ResourceFactory>> changeLogMerger) {
+                                        Function<Collection<ResourceFactory>,
+                                                Collection<ResourceFactory>> changeLogMerger,
+                                        Cli cli) {
         DataSource ds = getDataSource(dataSourceFactory);
 
         if (changeLog != null) {
@@ -65,12 +68,12 @@ public class LiquibaseFactory {
                     "Consider switching to 'changeLogs' collection instead. " +
                     "The new value will be '" + asClasspath + "'");
 
-            return new LegacyLiquibaseRunner(changeLog, ds);
+            return new LegacyLiquibaseRunner(changeLog, ds, cli);
         }
 
 
         Collection<ResourceFactory> allChangeLogs = changeLogMerger.apply(changeLogs);
-        return new LiquibaseRunner(allChangeLogs, ds);
+        return new LiquibaseRunner(allChangeLogs, ds, cli);
     }
 
     private DataSource getDataSource(DataSourceFactory dataSourceFactory) {

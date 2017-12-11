@@ -1,5 +1,6 @@
 package io.bootique.liquibase;
 
+import io.bootique.cli.Cli;
 import io.bootique.liquibase.database.DerbyDatabase;
 import io.bootique.resource.ResourceFactory;
 import liquibase.ContextExpression;
@@ -30,11 +31,15 @@ public class LiquibaseRunner {
 
     protected Collection<ResourceFactory> changeLogs;
     protected DataSource dataSource;
+    protected Cli cli;
     private SLFLiquibaseAdapter loggerAdapter;
 
-    public LiquibaseRunner(Collection<ResourceFactory> changeLogs, DataSource dataSource) {
+    public LiquibaseRunner(Collection<ResourceFactory> changeLogs,
+                           DataSource dataSource,
+                           Cli cli) {
         this.changeLogs = Objects.requireNonNull(changeLogs);
         this.dataSource = Objects.requireNonNull(dataSource);
+        this.cli = cli;
 
         Logger lbLogger = LoggerFactory.getLogger(Liquibase.class);
         this.loggerAdapter = new SLFLiquibaseAdapter(lbLogger);
@@ -99,8 +104,11 @@ public class LiquibaseRunner {
         databaseFactory.register(new DerbyDatabase());
 
         Database database = databaseFactory.findCorrectDatabaseImplementation(liquibaseConnection);
-
-        // TODO: set default schema?
+        // set default schema
+        String defaultSchema = cli.optionString(LiquibaseModule.DEFAULT_SCHEMA_OPTION);
+        if (defaultSchema != null) {
+            database.setDefaultSchemaName(defaultSchema);
+        }
 
         return database;
     }

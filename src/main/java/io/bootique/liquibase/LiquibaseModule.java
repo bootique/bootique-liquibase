@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import com.google.inject.multibindings.Multibinder;
 import io.bootique.BQCoreModule;
 import io.bootique.ConfigModule;
+import io.bootique.cli.Cli;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.liquibase.annotation.ChangeLogs;
@@ -22,6 +23,7 @@ import java.util.Set;
 
 public class LiquibaseModule extends ConfigModule {
     public static final String CONTEXT_OPTION = "lb-context";
+    public static final String DEFAULT_SCHEMA_OPTION = "lb-default-schema";
 
     public LiquibaseModule(String configPrefix) {
         super(configPrefix);
@@ -64,14 +66,23 @@ public class LiquibaseModule extends ConfigModule {
                 .addCommand(ClearCheckSumsCommand.class)
                 .addCommand(ChangelogSyncCommand.class)
                 .addCommand(DropAllCommand.class)
-                .addOption(createContextOption());
+                .addOptions(createContextOption(), createDefaultSchemaOption());
     }
 
     OptionMetadata createContextOption() {
         return OptionMetadata
                 .builder(CONTEXT_OPTION,
-                        "Specifies Liquibase context to control which changeSets will be executed in migration run")
+                        "Specifies Liquibase context to control which changeSets will be executed in migration run.")
                 .shortName('x')
+                .valueOptional()
+                .build();
+    }
+
+    OptionMetadata createDefaultSchemaOption() {
+        return OptionMetadata
+                .builder(DEFAULT_SCHEMA_OPTION,
+                        "Specifies the default schema to use for managed database objects and for Liquibase control tables.")
+                .shortName('d')
                 .valueOptional()
                 .build();
     }
@@ -87,11 +98,13 @@ public class LiquibaseModule extends ConfigModule {
     LiquibaseRunner provideRunner(ConfigurationFactory configFactory,
                                   DataSourceFactory dataSourceFactory,
                                   ChangeLogMerger changeLogMerger,
-                                  @ChangeLogs Set<ResourceFactory> injectedChangeLogs) {
+                                  @ChangeLogs Set<ResourceFactory> injectedChangeLogs,
+                                  Cli cli) {
 
         return configFactory
                 .config(LiquibaseFactory.class, configPrefix)
                 .createRunner(dataSourceFactory, configChangeLogs
-                        -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs));
+                                -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs),
+                        cli);
     }
 }

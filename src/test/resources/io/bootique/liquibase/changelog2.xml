@@ -7,7 +7,7 @@
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
 
     <changeSet id="create_table_x" author="unknown">
-        <createTable tableName="X" schemaName="test" catalogName="test">
+        <createTable tableName="X" schemaName="test">
             <column name="ID" type="java.sql.Types.VARCHAR(32)">
                 <constraints nullable="false"/>
             </column>
@@ -17,11 +17,11 @@
     </changeSet>
 
     <changeSet id="add_pk_x" author="unknown">
-        <addPrimaryKey tableName="X" columnNames="ID" schemaName="test" catalogName="test"/>
+        <addPrimaryKey tableName="X" columnNames="ID" schemaName="test"/>
     </changeSet>
 
     <changeSet id="insert_table_x" author="unknown">
-        <insert tableName="X" schemaName="test" catalogName="test">
+        <insert tableName="X" schemaName="test">
             <column name="ID" value="1"></column>
             <column name="SCHEMA" value="test"></column>
         </insert>

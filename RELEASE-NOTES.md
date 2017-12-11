@@ -1,3 +1,7 @@
+## 0.25
+
+* #22 Specify the default schema `--defaultSchemaName=<schema>` 
+
 ## 0.13
 
 * #7 Guess default DataSource if only one DataSource is available

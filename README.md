@@ -23,7 +23,7 @@ Provides [Liquibase](http://liquibase.org) integration with [Bootique](http://bo
         <dependency>
             <groupId>io.bootique.bom</groupId>
             <artifactId>bootique-bom</artifactId>
-            <version>0.24</version>
+            <version>0.25-SNAPSHOT</version>
             <type>pom</type>
             <scope>import</scope>
         </dependency>
@@ -86,5 +86,5 @@ OPTIONS
 
 ## Example Project
 
-[bootique-liquibase-demo](https://github.com/bootique-examples/bootique-liquibase-demo).
+[bootique-liquibase-demo](https://github.com/bootique-examples/bootique-liquibase-demo)
 

@@ -70,8 +70,10 @@ public class LiquibaseMySQLIT {
             super();
         }
 
+
         @Override
-        public Optional<ManagedDataSourceSupplier> create(Injector injector) {
+        public Optional<ManagedDataSourceSupplier> create(String dataSourceName, Injector injector) {
+           
             Supplier<DataSource> startup = () -> {
 
                 validate();

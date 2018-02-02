@@ -7,6 +7,11 @@ branches:
   only:
     - master
 
+sudo: required
+
+services:
+  - docker
+
 script:
   - 'if [ "$TRAVIS_SECURE_ENV_VARS" = "true" ]; then mvn clean source:jar javadoc:javadoc deploy --settings travis_settings.xml; fi'
   - 'if [ "$TRAVIS_SECURE_ENV_VARS" = "false" ]; then mvn clean verify; fi'

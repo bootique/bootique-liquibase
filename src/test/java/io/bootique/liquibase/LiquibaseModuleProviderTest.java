@@ -14,8 +14,8 @@ public class LiquibaseModuleProviderTest {
     public BQTestFactory testFactory = new BQTestFactory();
 
     @Test
-    public void testPresentInJar() {
-        BQModuleProviderChecker.testPresentInJar(LiquibaseModuleProvider.class);
+    public void testAutoLoadable() {
+        BQModuleProviderChecker.testAutoLoadable(LiquibaseModuleProvider.class);
     }
 
     @Test

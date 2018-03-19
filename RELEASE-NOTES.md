@@ -1,6 +1,7 @@
 ## 0.25
 
 * #22 Specify the default schema `--defaultSchemaName=<schema>` 
+* #25 Upgrade to bootique-modules-parent 0.8
 
 ## 0.13
 

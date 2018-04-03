@@ -3,7 +3,6 @@ package io.bootique.liquibase;
 import com.google.inject.Binder;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
-import com.google.inject.multibindings.Multibinder;
 import io.bootique.BQCoreModule;
 import io.bootique.ConfigModule;
 import io.bootique.cli.Cli;
@@ -39,19 +38,6 @@ public class LiquibaseModule extends ConfigModule {
      */
     public static LiquibaseModuleExtender extend(Binder binder) {
         return new LiquibaseModuleExtender(binder);
-    }
-
-    /**
-     * Returns a Guice {@link Multibinder} to add Liquibase change logs
-     *
-     * @param binder DI binder passed to the Module that invokes this method.
-     * @return returns a {@link Multibinder} for Liquibase change logs.
-     * @deprecated since 0.12 call {@link #extend(Binder)} and then call
-     * {@link LiquibaseModuleExtender#addChangeLog(ResourceFactory)}.
-     */
-    @Deprecated
-    public static Multibinder<ResourceFactory> contributeChangeLogs(Binder binder) {
-        return Multibinder.newSetBinder(binder, ResourceFactory.class, ChangeLogs.class);
     }
 
     @Override

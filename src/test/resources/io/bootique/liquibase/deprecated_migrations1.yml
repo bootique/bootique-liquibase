@@ -1,8 +1,0 @@
-jdbc:
-  test:
-    url: jdbc:derby:target/derby/migrations1;create=true
-    maxActive: 2
-
-liquibase:
-  datasource: test
-  changeLog: io/bootique/liquibase/deprecated_changelog1.yml

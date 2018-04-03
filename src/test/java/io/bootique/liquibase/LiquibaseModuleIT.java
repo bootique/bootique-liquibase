@@ -24,41 +24,6 @@ public class LiquibaseModuleIT {
     @Rule
     public final BQTestFactory testFactory = new BQTestFactory();
 
-    /**
-     * Testing deprecated 'changeSet' key.
-     *
-     * @deprecated since 0.11
-     */
-    @Test
-    @Deprecated
-    public void testLegacy_Migration() {
-
-        BQRuntime runtime = testFactory
-                .app("-c", "classpath:io/bootique/liquibase/deprecated_migrations1.yml", "-u")
-                .autoLoadModules()
-                .createRuntime();
-
-        CommandOutcome result = runtime.run();
-        assertTrue(result.isSuccess());
-
-        Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "NAME").build();
-        Object[] row = a.selectOne();
-        assertEquals(1, row[0]);
-        assertEquals("AA", row[1]);
-        assertEquals(1, a.getRowCount());
-
-        // rerun....
-        runtime = testFactory
-                .app("-c", "classpath:io/bootique/liquibase/deprecated_migrations1.yml", "-u")
-                .autoLoadModules()
-                .createRuntime();
-
-        result = runtime.run();
-        assertTrue(result.isSuccess());
-
-        assertEquals(1, a.getRowCount());
-    }
-
     @Test
     public void testMigration_SingleSet() {
         BQRuntime runtime = testFactory
@@ -73,7 +38,8 @@ public class LiquibaseModuleIT {
         Object[] row = a.selectOne();
         assertEquals(1, row[0]);
         assertEquals("AA", row[1]);
-        assertEquals(1, a.getRowCount());
+
+        a.matcher().assertOneMatch();
 
         // rerun....
         runtime = testFactory
@@ -84,7 +50,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(1, a.getRowCount());
+        a.matcher().assertOneMatch();
     }
 
     @Test
@@ -118,7 +84,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(2, a.getRowCount());
+        a.matcher().assertMatches(2);
     }
 
     @Test
@@ -152,7 +118,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(2, a.getRowCount());
+        a.matcher().assertMatches(2);
     }
 
     @Test
@@ -189,7 +155,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(2, a.getRowCount());
+        a.matcher().assertMatches(2);
     }
 
     @Test
@@ -227,7 +193,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(2, a.getRowCount());
+        a.matcher().assertMatches(2);
     }
 
     @Test
@@ -272,7 +238,7 @@ public class LiquibaseModuleIT {
         assertEquals("test and prod", rows.get(3)[1]);
         assertEquals("test or prod", rows.get(4)[1]);
 
-        assertEquals(5, a.getRowCount());
+        a.matcher().assertMatches(5);
 
         // rerun....
         runtime = testFactory
@@ -283,7 +249,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(5, a.getRowCount());
+        a.matcher().assertMatches(5);
     }
 
     @Test
@@ -298,7 +264,7 @@ public class LiquibaseModuleIT {
         assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
-        assertEquals(7, a.getRowCount());
+        a.matcher().assertMatches(7);
 
         // rerun....
         runtime = testFactory
@@ -309,7 +275,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(7, a.getRowCount());
+        a.matcher().assertMatches(7);
     }
 
     @Test
@@ -323,7 +289,7 @@ public class LiquibaseModuleIT {
         assertTrue(result.isSuccess());
 
         Table a = DatabaseChannel.get(runtime).newTable("A").columnNames("ID", "CONTEXT").build();
-        assertEquals(3, a.getRowCount());
+        a.matcher().assertMatches(3);
         List<Object[]> rows = a.select();
         assertEquals("3", rows.get(0)[0]);
         assertEquals("6", rows.get(1)[0]);
@@ -342,7 +308,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(3, a.getRowCount());
+        a.matcher().assertMatches(3);
     }
 
     @Test
@@ -359,7 +325,7 @@ public class LiquibaseModuleIT {
         Object[] row = y.selectOne();
         assertEquals("1", row[0]);
         assertEquals("APP", row[1]);
-        assertEquals(1, y.getRowCount());
+        y.matcher().assertOneMatch();
 
         Table x = DatabaseChannel.get(runtime).newTable("X").columnNames("ID", "SCHEMA").build();
         try {
@@ -378,7 +344,7 @@ public class LiquibaseModuleIT {
         result = runtime.run();
         assertTrue(result.isSuccess());
 
-        assertEquals(1, y.getRowCount());
+        y.matcher().assertOneMatch();
     }
 
     @Test

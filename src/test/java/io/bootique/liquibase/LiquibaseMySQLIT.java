@@ -54,13 +54,13 @@ public class LiquibaseMySQLIT {
         Object[] rowX = x.selectOne();
         assertEquals("1", rowX[0]);
         assertEquals("testX", rowX[1]);
-        assertEquals(1, x.getRowCount());
+        x.matcher().assertOneMatch();
 
         Table y = DatabaseChannel.get(runtime).newTable("Y").columnNames("ID", "SCHEMA").build();
         Object[] rowY = y.selectOne();
         assertEquals("1", rowY[0]);
         assertEquals("testY", rowY[1]);
-        assertEquals(1, y.getRowCount());
+        y.matcher().assertOneMatch();
     }
 
     @JsonTypeName("mysql")

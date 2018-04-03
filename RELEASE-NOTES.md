@@ -1,3 +1,7 @@
+## 0.26
+
+* #26 Cleaning up APIs deprecated since <= 0.25
+
 ## 0.25
 
 * #22 Specify the default schema `--defaultSchemaName=<schema>` 

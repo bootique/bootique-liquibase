@@ -1,9 +1,3 @@
-jdbc:
-  myds:
-    type: "mysql"
-    url: jdbc:dummy
-    maxActive: 2
-
 liquibase:
   changeLogs:
     - classpath:io/bootique/liquibase/changelog3.xml

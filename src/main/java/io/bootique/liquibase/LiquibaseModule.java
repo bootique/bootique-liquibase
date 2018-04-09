@@ -19,6 +19,7 @@ import io.bootique.meta.application.OptionMetadata;
 import io.bootique.resource.ResourceFactory;
 
 import java.util.Set;
+import java.util.logging.Level;
 
 public class LiquibaseModule extends ConfigModule {
     public static final String CONTEXT_OPTION = "lb-context";
@@ -52,7 +53,9 @@ public class LiquibaseModule extends ConfigModule {
                 .addCommand(ClearCheckSumsCommand.class)
                 .addCommand(ChangelogSyncCommand.class)
                 .addCommand(DropAllCommand.class)
-                .addOptions(createContextOption(), createDefaultSchemaOption());
+                .addOptions(createContextOption(), createDefaultSchemaOption())
+                // by default turn off Liquibase SQL logging (which is done at INFO level)
+                .setLogLevel("liquibase.executor.jvm.JdbcExecutor", Level.WARNING);
     }
 
     OptionMetadata createContextOption() {

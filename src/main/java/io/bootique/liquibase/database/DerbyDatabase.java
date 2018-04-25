@@ -4,7 +4,7 @@ import liquibase.database.AbstractJdbcDatabase;
 import liquibase.database.DatabaseConnection;
 import liquibase.exception.DatabaseException;
 import liquibase.executor.ExecutorService;
-import liquibase.logging.LogFactory;
+import liquibase.logging.LogService;
 
 import java.lang.reflect.Field;
 
@@ -36,7 +36,7 @@ public class DerbyDatabase extends liquibase.database.core.DerbyDatabase {
                 try {
                     connection.setAutoCommit(previousAutoCommit);
                 } catch (DatabaseException e) {
-                    LogFactory.getInstance().getLog().warning("Failed to restore the auto commit to " + previousAutoCommit);
+                    LogService.getLog(getClass()).warning("Failed to restore the auto commit to " + previousAutoCommit);
                     throw e;
                 }
             }

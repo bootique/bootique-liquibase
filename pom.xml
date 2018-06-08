@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>io.bootique.modules.parent</groupId>
 		<artifactId>bootique-modules-parent</artifactId>
-		<version>0.8</version>
+		<version>0.10</version>
 	</parent>
 
 	<groupId>io.bootique.liquibase</groupId>
@@ -14,13 +14,11 @@
 	<packaging>jar</packaging>
 
 	<name>bootique-liquibase: Liquibase Integration with Bootique</name>
-	<description>
-		Provides Liquibase integration with Bootique.
-	</description>
+	<description>Provides Liquibase integration with Bootique.</description>
 
 	<properties>
-		<liquibase-version>3.6.0</liquibase-version>
-		<bootique-version>${project.version}</bootique-version>
+		<bootique.version>${project.version}</bootique.version>
+		<liquibase.version>3.6.0</liquibase.version>
 	</properties>
 
 	<scm>
@@ -42,37 +40,32 @@
 			<dependency>
 				<groupId>org.liquibase</groupId>
 				<artifactId>liquibase-core</artifactId>
-				<version>${liquibase-version}</version>
+				<version>${liquibase.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.bootique</groupId>
 				<artifactId>bootique</artifactId>
-				<version>${bootique-version}</version>
+				<version>${bootique.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.bootique</groupId>
 				<artifactId>bootique-test</artifactId>
-				<version>${bootique-version}</version>
+				<version>${bootique.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.bootique.jdbc</groupId>
 				<artifactId>bootique-jdbc</artifactId>
-				<version>${bootique-version}</version>
+				<version>${bootique.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.bootique.jdbc</groupId>
 				<artifactId>bootique-jdbc-tomcat</artifactId>
-				<version>${bootique-version}</version>
+				<version>${bootique.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>io.bootique.jdbc</groupId>
 				<artifactId>bootique-jdbc-test</artifactId>
-				<version>${bootique-version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.slf4j</groupId>
-				<artifactId>slf4j-simple</artifactId>
-				<version>${slf4j.version}</version>
+				<version>${bootique.version}</version>
 			</dependency>
 			<dependency>
 				<groupId>org.testcontainers</groupId>

@@ -1,4 +1,4 @@
-## 0.26
+## 1.0.RC1
 
 * #26 Cleaning up APIs deprecated since <= 0.25
 * #27 Upgrade to the latest Liquibase - 3.6.0 #27

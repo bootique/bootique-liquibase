@@ -18,7 +18,7 @@
   -->
 
 [![Build Status](https://travis-ci.org/bootique/bootique-liquibase.svg)](https://travis-ci.org/bootique/bootique-liquibase)
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.bootique.liquibase/bootique-liquibase/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.bootique.liquibase/bootique-liquibase/)
+[![Maven Central](https://img.shields.io/maven-central/v/io.bootique.liquibase/bootique-liquibase.svg?colorB=brightgreen)](https://search.maven.org/artifact/io.bootique.liquibase/bootique-liquibase/)
 
 # bootique-liquibase
 

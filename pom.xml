@@ -29,7 +29,7 @@
 
 	<groupId>io.bootique.liquibase</groupId>
 	<artifactId>bootique-liquibase</artifactId>
-	<version>1.0.RC2-SNAPSHOT</version>
+	<version>1.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
 	<name>bootique-liquibase: Liquibase Integration with Bootique</name>

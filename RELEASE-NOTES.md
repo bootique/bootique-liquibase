@@ -1,3 +1,9 @@
+## 1.1
+
+* #30 DropAll does not work in shadowed JAR / upgrade LB to 3.6.3
+
+## 1.0
+
 ## 1.0.RC1
 
 * #26 Cleaning up APIs deprecated since <= 0.25

@@ -109,8 +109,7 @@ public class LiquibaseModule extends ConfigModule {
                                   @ChangeLogs Set<ResourceFactory> injectedChangeLogs,
                                   Cli cli) {
 
-        return configFactory
-                .config(LiquibaseFactory.class, configPrefix)
+        return config(LiquibaseFactory.class, configFactory)
                 .createRunner(dataSourceFactory, configChangeLogs
                                 -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs),
                         cli);

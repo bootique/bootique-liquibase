@@ -70,7 +70,7 @@ public class LiquibaseFactory {
         if (datasource == null) {
             if (allNames.isEmpty()) {
                 throw new IllegalStateException("No DataSources are available for Liquibase. " +
-                        "Add a DataSource via 'bootique-jdbc'or 'bootique-liquibase'");
+                        "Add a DataSource via 'bootique-jdbc' or 'bootique-liquibase'");
             }
 
             if (allNames.size() == 1) {

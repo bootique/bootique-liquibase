@@ -19,9 +19,9 @@
 
 package io.bootique.liquibase;
 
-import com.google.inject.Binder;
-import com.google.inject.multibindings.Multibinder;
 import io.bootique.ModuleExtender;
+import io.bootique.di.Binder;
+import io.bootique.di.SetBuilder;
 import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.resource.ResourceFactory;
 
@@ -30,7 +30,7 @@ import io.bootique.resource.ResourceFactory;
  */
 public class LiquibaseModuleExtender extends ModuleExtender<LiquibaseModuleExtender> {
 
-    private Multibinder<ResourceFactory> changeLogs;
+    private SetBuilder<ResourceFactory> changeLogs;
 
     public LiquibaseModuleExtender(Binder binder) {
         super(binder);
@@ -43,7 +43,7 @@ public class LiquibaseModuleExtender extends ModuleExtender<LiquibaseModuleExten
     }
 
     public LiquibaseModuleExtender addChangeLog(ResourceFactory changeLog) {
-        contributeChangeLogs().addBinding().toInstance(changeLog);
+        contributeChangeLogs().add(changeLog);
         return this;
     }
 
@@ -51,7 +51,7 @@ public class LiquibaseModuleExtender extends ModuleExtender<LiquibaseModuleExten
         return addChangeLog(new ResourceFactory(changeLog));
     }
 
-    protected Multibinder<ResourceFactory> contributeChangeLogs() {
+    protected SetBuilder<ResourceFactory> contributeChangeLogs() {
         return changeLogs != null ? changeLogs : (changeLogs = newSet(ResourceFactory.class, ChangeLogs.class));
     }
 }

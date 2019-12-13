@@ -19,13 +19,12 @@
 
 package io.bootique.liquibase;
 
-import com.google.inject.Binder;
-import com.google.inject.Provides;
-import com.google.inject.Singleton;
 import io.bootique.BQCoreModule;
 import io.bootique.ConfigModule;
 import io.bootique.cli.Cli;
 import io.bootique.config.ConfigurationFactory;
+import io.bootique.di.Binder;
+import io.bootique.di.Provides;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.liquibase.command.ChangelogSyncCommand;
@@ -39,6 +38,7 @@ import io.bootique.resource.ResourceFactory;
 
 import java.util.Set;
 import java.util.logging.Level;
+import javax.inject.Singleton;
 
 public class LiquibaseModule extends ConfigModule {
     public static final String CONTEXT_OPTION = "lb-context";

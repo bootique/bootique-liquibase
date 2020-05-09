@@ -24,8 +24,6 @@ import io.bootique.annotation.BQConfigProperty;
 import io.bootique.cli.Cli;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.resource.ResourceFactory;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.sql.DataSource;
 import java.util.Collection;
@@ -33,8 +31,6 @@ import java.util.function.Function;
 
 @BQConfig("Configures Liquibase migrations.")
 public class LiquibaseFactory {
-
-    private static final Logger LOGGER = LoggerFactory.getLogger(LiquibaseFactory.class);
 
     private String datasource;
     private Collection<ResourceFactory> changeLogs;
@@ -55,10 +51,10 @@ public class LiquibaseFactory {
         this.changeLogs = changeLogs;
     }
 
-    public LiquibaseRunner createRunner(DataSourceFactory dataSourceFactory,
-                                        Function<Collection<ResourceFactory>,
-                                                Collection<ResourceFactory>> changeLogMerger,
-                                        Cli cli) {
+    public LiquibaseRunner createRunner(
+            DataSourceFactory dataSourceFactory,
+            Function<Collection<ResourceFactory>, Collection<ResourceFactory>> changeLogMerger,
+            Cli cli) {
         DataSource ds = getDataSource(dataSourceFactory);
         Collection<ResourceFactory> allChangeLogs = changeLogMerger.apply(changeLogs);
         return new LiquibaseRunner(allChangeLogs, ds, cli);

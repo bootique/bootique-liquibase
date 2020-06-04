@@ -37,7 +37,7 @@
 
 	<properties>
 		<bootique.version>${project.version}</bootique.version>
-		<liquibase.version>3.6.3</liquibase.version>
+		<liquibase.version>3.9.0</liquibase.version>
 	</properties>
 
 	<scm>

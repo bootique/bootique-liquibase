@@ -1,6 +1,7 @@
 ## 2.0
 
 * #31 snakeyaml version conflict with Jackson 
+* #32 upgrade to liquibase 3.9.0
 
 ## 1.1
 

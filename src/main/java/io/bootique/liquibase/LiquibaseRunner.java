@@ -23,6 +23,7 @@ import io.bootique.cli.Cli;
 import io.bootique.liquibase.database.DerbyDatabase;
 import io.bootique.resource.ResourceFactory;
 import liquibase.ContextExpression;
+import liquibase.LabelExpression;
 import liquibase.Liquibase;
 import liquibase.changelog.ChangeLogParameters;
 import liquibase.changelog.DatabaseChangeLog;
@@ -85,10 +86,13 @@ public class LiquibaseRunner {
         DatabaseChangeLog changeLog = new DatabaseChangeLog();
         changeLog.setChangeLogParameters(new ChangeLogParameters(database));
 
+        // TODO: do something useful with this?
+        LabelExpression labelExpression = new LabelExpression();
+
         changeLogs.forEach(cl -> {
             try {
                 LOGGER.info("Including change log: '{}'", cl.getResourceId());
-                changeLog.include(cl.getResourceId(), false, resourceAccessor, new ContextExpression(), true);
+                changeLog.include(cl.getResourceId(), false, resourceAccessor, new ContextExpression(), labelExpression, false, true);
             } catch (LiquibaseException e) {
                 throw new RuntimeException("Error configuring Liquibase", e);
             }

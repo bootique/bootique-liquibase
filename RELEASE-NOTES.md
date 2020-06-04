@@ -1,3 +1,7 @@
+## 2.0
+
+* #31 snakeyaml version conflict with Jackson 
+
 ## 1.1
 
 * #30 DropAll does not work in shadowed JAR / upgrade LB to 3.6.3

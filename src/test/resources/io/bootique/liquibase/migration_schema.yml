@@ -13,12 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-jdbc:
-  ds1:
-    url: jdbc:derby:target/derby/ds1;create=true
-    maxActive: 2
-
 liquibase:
-  datasource: ds1
+  datasource: test
   changeLogs:
     - classpath:io/bootique/liquibase/changelog2.xml

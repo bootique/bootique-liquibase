@@ -38,7 +38,8 @@
 
     <properties>
         <bootique.version>${project.version}</bootique.version>
-        <liquibase.version>3.9.0</liquibase.version>
+        <testcontainers.version>1.14.2</testcontainers.version>
+        <mysql.version>8.0.20</mysql.version>
     </properties>
 
     <scm>
@@ -58,34 +59,24 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>io.bootique</groupId>
-                <artifactId>bootique-test</artifactId>
-                <version>${bootique.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>io.bootique.jdbc</groupId>
                 <artifactId>bootique-jdbc-liquibase-internal</artifactId>
                 <version>${bootique.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.bootique.jdbc</groupId>
-                <artifactId>bootique-jdbc-tomcat</artifactId>
-                <version>${bootique.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.bootique.jdbc</groupId>
-                <artifactId>bootique-jdbc-test</artifactId>
+                <artifactId>bootique-jdbc-junit5</artifactId>
                 <version>${bootique.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>
                 <artifactId>mysql</artifactId>
-                <version>1.4.3</version>
+                <version>${testcontainers.version}</version>
             </dependency>
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
-                <version>8.0.8-dmr</version>
+                <version>${mysql.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -103,28 +94,13 @@
 
         <!-- Unit test dependencies -->
         <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mockito</groupId>
             <artifactId>mockito-core</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>io.bootique</groupId>
-            <artifactId>bootique-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>io.bootique.jdbc</groupId>
-            <artifactId>bootique-jdbc-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.bootique.jdbc</groupId>
-            <artifactId>bootique-jdbc-tomcat</artifactId>
+            <artifactId>bootique-jdbc-junit5</artifactId>
             <scope>test</scope>
         </dependency>
         <dependency>

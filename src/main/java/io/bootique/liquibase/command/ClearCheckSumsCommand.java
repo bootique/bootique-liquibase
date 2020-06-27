@@ -19,16 +19,17 @@
 
 package io.bootique.liquibase.command;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
-import io.bootique.meta.application.CommandMetadata;
 import io.bootique.cli.Cli;
 import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
-import io.bootique.liquibase.LiquibaseRunner;
+import io.bootique.jdbc.liquibase.LiquibaseRunner;
+import io.bootique.meta.application.CommandMetadata;
+import liquibase.Liquibase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @since 0.11
@@ -50,17 +51,17 @@ public class ClearCheckSumsCommand extends CommandWithMetadata {
 
     @Override
     public CommandOutcome run(Cli cli) {
-
         LOGGER.info("Will run 'liquibase clearCheckSums'...");
+        return runnerProvider.get().call(this::run);
+    }
 
-        return runnerProvider.get().runWithLiquibase(lb -> {
-            try {
-                lb.clearCheckSums();
-                return CommandOutcome.succeeded();
-            } catch (Exception e) {
-                return CommandOutcome.failed(1, e);
-            }
-        });
+    protected CommandOutcome run(Liquibase lb) {
+        try {
+            lb.clearCheckSums();
+            return CommandOutcome.succeeded();
+        } catch (Exception e) {
+            return CommandOutcome.failed(1, e);
+        }
     }
 }
 

@@ -26,19 +26,15 @@ import io.bootique.config.ConfigurationFactory;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
 import io.bootique.jdbc.DataSourceFactory;
+import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.liquibase.annotation.ChangeLogs;
-import io.bootique.liquibase.command.ChangelogSyncCommand;
-import io.bootique.liquibase.command.ChangelogSyncSqlCommand;
-import io.bootique.liquibase.command.ClearCheckSumsCommand;
-import io.bootique.liquibase.command.DropAllCommand;
-import io.bootique.liquibase.command.UpdateCommand;
-import io.bootique.liquibase.command.ValidateCommand;
+import io.bootique.liquibase.command.*;
 import io.bootique.meta.application.OptionMetadata;
 import io.bootique.resource.ResourceFactory;
 
+import javax.inject.Singleton;
 import java.util.Set;
 import java.util.logging.Level;
-import javax.inject.Singleton;
 
 public class LiquibaseModule extends ConfigModule {
     public static final String CONTEXT_OPTION = "lb-context";
@@ -109,9 +105,9 @@ public class LiquibaseModule extends ConfigModule {
                                   @ChangeLogs Set<ResourceFactory> injectedChangeLogs,
                                   Cli cli) {
 
-        return config(LiquibaseFactory.class, configFactory)
-                .createRunner(dataSourceFactory, configChangeLogs
-                                -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs),
-                        cli);
+        return config(LiquibaseRunnerFactory.class, configFactory).createRunner(
+                dataSourceFactory,
+                configChangeLogs -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs),
+                cli);
     }
 }

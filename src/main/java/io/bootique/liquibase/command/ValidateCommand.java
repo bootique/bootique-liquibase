@@ -19,16 +19,17 @@
 
 package io.bootique.liquibase.command;
 
-import javax.inject.Inject;
-import javax.inject.Provider;
-
 import io.bootique.cli.Cli;
 import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
-import io.bootique.liquibase.LiquibaseRunner;
+import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.meta.application.CommandMetadata;
+import liquibase.Liquibase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import javax.inject.Inject;
+import javax.inject.Provider;
 
 /**
  * @since 0.11
@@ -51,16 +52,16 @@ public class ValidateCommand extends CommandWithMetadata {
 
     @Override
     public CommandOutcome run(Cli cli) {
-
         LOGGER.info("Will run 'liquibase validate'...");
+        return runnerProvider.get().call(this::run);
+    }
 
-        return runnerProvider.get().runWithLiquibase(lb -> {
-            try {
-                lb.validate();
-                return CommandOutcome.succeeded();
-            } catch (Exception e) {
-                return CommandOutcome.failed(1, e);
-            }
-        });
+    protected CommandOutcome run(Liquibase lb) {
+        try {
+            lb.validate();
+            return CommandOutcome.succeeded();
+        } catch (Exception e) {
+            return CommandOutcome.failed(1, e);
+        }
     }
 }

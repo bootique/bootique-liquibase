@@ -40,7 +40,7 @@ public class LiquibaseModuleProvider implements BQModuleProvider {
     public Map<String, Type> configs() {
         // TODO: config prefix is hardcoded. Refactor away from ConfigModule, and make provider
         // generate config prefix, reusing it in metadata...
-        return Collections.singletonMap("liquibase", LiquibaseFactory.class);
+        return Collections.singletonMap("liquibase", LiquibaseRunnerFactory.class);
     }
 
     @Override

@@ -22,17 +22,18 @@ package io.bootique.liquibase.command;
 import io.bootique.cli.Cli;
 import io.bootique.command.CommandOutcome;
 import io.bootique.command.CommandWithMetadata;
-import io.bootique.liquibase.LiquibaseRunner;
+import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.meta.application.CommandMetadata;
 import io.bootique.meta.application.OptionMetadata;
 import liquibase.CatalogAndSchema;
+import liquibase.Liquibase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 import javax.inject.Inject;
 import javax.inject.Provider;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * @since 0.13
@@ -72,14 +73,15 @@ public class DropAllCommand extends CommandWithMetadata {
     @Override
     public CommandOutcome run(Cli cli) {
         LOGGER.info("Will run 'liquibase dropAll'...");
+        return runnerProvider.get().call(lb -> run(cli, lb));
+    }
 
-        return runnerProvider.get().runWithLiquibase(lb -> {
-            try {
-                lb.dropAll(new CatalogAndSchema(cli.optionString("catalog"), cli.optionString("schema")));
-                return CommandOutcome.succeeded();
-            } catch (Exception e) {
-                return CommandOutcome.failed(1, e);
-            }
-        });
+    protected CommandOutcome run(Cli cli, Liquibase lb) {
+        try {
+            lb.dropAll(new CatalogAndSchema(cli.optionString("catalog"), cli.optionString("schema")));
+            return CommandOutcome.succeeded();
+        } catch (Exception e) {
+            return CommandOutcome.failed(1, e);
+        }
     }
 }

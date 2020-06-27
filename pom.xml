@@ -58,38 +58,13 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <groupId>org.liquibase</groupId>
-                <artifactId>liquibase-core</artifactId>
-                <version>${liquibase.version}</version>
-                <exclusions>
-                    <!-- Version conflicting with Bootique core one imported via jackson -->
-                    <exclusion>
-                        <groupId>org.yaml</groupId>
-                        <artifactId>snakeyaml</artifactId>
-                    </exclusion>
-                    <!--
-                    Logback dependency is only used by "liquibase.integration.commandline.Main". No need to pollute
-                    the classpath with it for general use
-                    -->
-                    <exclusion>
-                        <groupId>ch.qos.logback</groupId>
-                        <artifactId>logback-classic</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-            <dependency>
-                <groupId>io.bootique</groupId>
-                <artifactId>bootique</artifactId>
-                <version>${bootique.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>io.bootique</groupId>
                 <artifactId>bootique-test</artifactId>
                 <version>${bootique.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.bootique.jdbc</groupId>
-                <artifactId>bootique-jdbc</artifactId>
+                <artifactId>bootique-jdbc-liquibase-internal</artifactId>
                 <version>${bootique.version}</version>
             </dependency>
             <dependency>
@@ -117,25 +92,13 @@
 
     <dependencies>
         <!-- Compile dependencies -->
-        <dependency>
-            <groupId>org.liquibase</groupId>
-            <artifactId>liquibase-core</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>io.bootique</groupId>
-            <artifactId>bootique</artifactId>
-            <scope>compile</scope>
-        </dependency>
+        <!--
+        This module manages Liquibase dependency and provides utilities
+        for running LB embedded in the app
+        -->
         <dependency>
             <groupId>io.bootique.jdbc</groupId>
-            <artifactId>bootique-jdbc</artifactId>
-            <scope>compile</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <scope>compile</scope>
+            <artifactId>bootique-jdbc-liquibase-internal</artifactId>
         </dependency>
 
         <!-- Unit test dependencies -->

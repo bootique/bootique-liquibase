@@ -21,6 +21,7 @@ package io.bootique.liquibase;
 
 import io.bootique.BQRuntime;
 import io.bootique.command.CommandOutcome;
+import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.jdbc.test.DatabaseChannel;
 import io.bootique.jdbc.test.Table;
 import io.bootique.test.junit.BQTestFactory;
@@ -374,11 +375,9 @@ public class LiquibaseModuleIT {
                 .createRuntime();
 
         LiquibaseRunner runner = runtime.getInstance(LiquibaseRunner.class);
-        runner.runWithLiquibase(lb -> {
+        runner.run(lb -> {
             assertEquals("TEST", lb.getDatabase().getDefaultSchemaName());
             assertEquals("TEST", lb.getDatabase().getLiquibaseSchemaName());
-
-            return lb;
         });
     }
 

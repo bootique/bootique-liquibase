@@ -74,7 +74,7 @@ public class LiquibaseRunner {
         ResourceAccessor resourceAccessor = new ResourceFactoryAccessor();
 
         try {
-            Database liquibaseDB = createDatabase(dataSource.getConnection(), resourceAccessor);
+            Database liquibaseDB = createDatabase(dataSource.getConnection());
             DatabaseChangeLog changeLog = createDatabaseChangeLog(liquibaseDB, resourceAccessor);
             return new Liquibase(changeLog, resourceAccessor, liquibaseDB);
         } catch (SQLException | LiquibaseException e) {
@@ -102,7 +102,7 @@ public class LiquibaseRunner {
     }
 
 
-    protected Database createDatabase(Connection c, ResourceAccessor resourceAccessor) throws DatabaseException {
+    protected Database createDatabase(Connection c) throws DatabaseException {
 
         DatabaseConnection liquibaseConnection = new JdbcConnection(c);
         DatabaseFactory databaseFactory = DatabaseFactory.getInstance();

@@ -25,54 +25,24 @@ import io.bootique.di.BQModule;
 import io.bootique.jdbc.junit5.DbTester;
 import io.bootique.jdbc.junit5.Table;
 import io.bootique.jdbc.liquibase.LiquibaseRunner;
+import io.bootique.junit5.BQTest;
 import io.bootique.junit5.BQTestFactory;
+import io.bootique.junit5.BQTestTool;
 import io.bootique.junit5.TestRuntumeBuilder;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 
 import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@BQTest
 public class UpdateCommand_DerbyIT {
 
-    // TODO: DbTester should start supporting per-test scope.. So replace all these DBs with just one
+    @BQTestTool
+    final DbTester db = DbTester.derbyDb();
 
-    @RegisterExtension
-    final static DbTester db1 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db2 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db3 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db4 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db5 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db6 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db7 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db8 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db9 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db10 = DbTester.derbyDb();
-
-    @RegisterExtension
-    static final DbTester db11 = DbTester.derbyDb();
-
-    @RegisterExtension
+    @BQTestTool
     final BQTestFactory testFactory = new BQTestFactory();
 
     private CommandOutcome run(DbTester db, String[] cli, BQModule... extras) {
@@ -92,11 +62,11 @@ public class UpdateCommand_DerbyIT {
     public void testSingleSet() {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u", "-d", "target/derby/migrations1"};
-        CommandOutcome migrate1 = run(db1, cli);
+        CommandOutcome migrate1 = run(db, cli);
 
         assertTrue(migrate1.isSuccess());
 
-        Table a = db1.getTable("A");
+        Table a = db.getTable("A");
         a.matcher().assertOneMatch();
 
         Object[] row = a.selectOne();
@@ -104,7 +74,7 @@ public class UpdateCommand_DerbyIT {
         assertEquals("AA", row[1]);
 
         // rerun....
-        CommandOutcome migrate2 = run(db1, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertOneMatch();
     }
@@ -114,10 +84,10 @@ public class UpdateCommand_DerbyIT {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations2.yml", "-u"};
 
-        CommandOutcome migrate1 = run(db2, cli);
+        CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
 
-        Map<Object, Object[]> rowMap = db2.getTable("A").selectAsMap("ID");
+        Map<Object, Object[]> rowMap = db.getTable("A").selectAsMap("ID");
         assertEquals(2, rowMap.size());
 
         Object[] rowA = rowMap.get(1);
@@ -127,19 +97,19 @@ public class UpdateCommand_DerbyIT {
         assertEquals("BB", rowB[1]);
 
         // rerun....
-        CommandOutcome migrate2 = run(db2, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
-        db2.getTable("A").matcher().assertMatches(2);
+        db.getTable("A").matcher().assertMatches(2);
     }
 
     @Test
     public void testMultipleSetsViaYaml() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u"};
 
-        CommandOutcome migrate1 = run(db3, cli);
+        CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
 
-        Table a = db3.getTable("A");
+        Table a = db.getTable("A");
 
         Map<Object, Object[]> rowMap = a.selectAsMap("ID");
 
@@ -152,7 +122,7 @@ public class UpdateCommand_DerbyIT {
         assertEquals("BB", rowB[1]);
 
         // rerun....
-        CommandOutcome migrate2 = run(db3, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertMatches(2);
     }
@@ -160,13 +130,13 @@ public class UpdateCommand_DerbyIT {
     @Test
     public void testMultipleSetsContribution() {
         String[] cli = {"-u"};
-        CommandOutcome migrate1 = run(db4, cli, b -> LiquibaseModule.extend(b)
+        CommandOutcome migrate1 = run(db, cli, b -> LiquibaseModule.extend(b)
                 .addChangeLog("classpath:io/bootique/liquibase/changeset1.sql")
                 .addChangeLog("classpath:io/bootique/liquibase/changeset2.sql"));
 
         assertTrue(migrate1.isSuccess());
 
-        Table a = db4.getTable("A");
+        Table a = db.getTable("A");
         Map<Object, Object[]> rowMap = a.selectAsMap("ID");
 
         assertEquals(2, rowMap.size());
@@ -178,7 +148,7 @@ public class UpdateCommand_DerbyIT {
         assertEquals("BB", rowB[1]);
 
         // rerun....
-        CommandOutcome migrate2 = run(db4, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertMatches(2);
     }
@@ -187,14 +157,14 @@ public class UpdateCommand_DerbyIT {
     public void testYamlOverridesDI() {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u"};
-        CommandOutcome migrate1 = run(db5, cli, b -> LiquibaseModule.extend(b)
+        CommandOutcome migrate1 = run(db, cli, b -> LiquibaseModule.extend(b)
                 .addChangeLog("classpath:io/bootique/liquibase/changeset1.sql")
                 .addChangeLog("classpath:io/bootique/liquibase/changeset2.sql")
                 .addChangeLog("classpath:io/bootique/liquibase/changeset3.sql"));
 
         assertTrue(migrate1.isSuccess());
 
-        Table a = db5.getTable("A");
+        Table a = db.getTable("A");
 
         Map<Object, Object[]> rowMap = a.selectAsMap("ID");
 
@@ -207,7 +177,7 @@ public class UpdateCommand_DerbyIT {
         assertEquals("BB", rowB[1]);
 
         // rerun....
-        CommandOutcome migrate2 = run(db5, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertMatches(2);
     }
@@ -216,10 +186,10 @@ public class UpdateCommand_DerbyIT {
     public void testDefaultDataSource() {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations1_implicit_ds.yml", "-u"};
-        CommandOutcome migrate1 = run(db6, cli);
+        CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
 
-        Table a = db1.getTable("A");
+        Table a = db.getTable("A");
         a.matcher().assertOneMatch();
 
         Object[] row = a.selectOne();
@@ -227,7 +197,7 @@ public class UpdateCommand_DerbyIT {
         assertEquals("AA", row[1]);
 
         // rerun....
-        CommandOutcome migrate2 = run(db6, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertOneMatch();
     }
@@ -235,10 +205,10 @@ public class UpdateCommand_DerbyIT {
     @Test
     public void testContext() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "test", "-x", "prod"};
-        CommandOutcome migrate1 = run(db7, cli);
+        CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
 
-        Table a = db7.getTable("A");
+        Table a = db.getTable("A");
         List<Object[]> rows = a.select();
         assertEquals("1", rows.get(0)[0]);
         assertEquals("2", rows.get(1)[0]);
@@ -255,7 +225,7 @@ public class UpdateCommand_DerbyIT {
         a.matcher().assertMatches(5);
 
         // rerun....
-        CommandOutcome migrate2 = run(db7, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertMatches(5);
     }
@@ -266,14 +236,14 @@ public class UpdateCommand_DerbyIT {
         // no explicit context, so all contexts must be run
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u"};
-        CommandOutcome migrate1 = run(db8, cli);
+        CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
 
-        Table a = db8.getTable("A");
+        Table a = db.getTable("A");
         a.matcher().assertMatches(7);
 
         // rerun....
-        CommandOutcome migrate2 = run(db8, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertMatches(7);
     }
@@ -281,10 +251,10 @@ public class UpdateCommand_DerbyIT {
     @Test
     public void testUnknownContext() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "unknown"};
-        CommandOutcome migrate1 = run(db9, cli);
+        CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
 
-        Table a = db9.getTable("A");
+        Table a = db.getTable("A");
         a.matcher().assertMatches(3);
         List<Object[]> rows = a.select();
         assertEquals("3", rows.get(0)[0]);
@@ -296,7 +266,7 @@ public class UpdateCommand_DerbyIT {
         assertEquals("!test and !prod", rows.get(2)[1]);
 
         // rerun....
-        CommandOutcome migrate2 = run(db9, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         a.matcher().assertMatches(3);
     }
@@ -304,20 +274,20 @@ public class UpdateCommand_DerbyIT {
     @Test
     public void testSchema() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migration_schema.yml", "-u"};
-        CommandOutcome migrate1 = run(db10, cli);
+        CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
 
-        Table y = db10.getTable("Y");
+        Table y = db.getTable("Y");
         Object[] row = y.selectOne();
         assertEquals("1", row[0]);
         assertEquals("APP", row[1]);
         y.matcher().assertOneMatch();
 
-        Table x = db10.getTable("X");
+        Table x = db.getTable("X");
         assertThrows(Exception.class, () -> x.selectOne());
 
         // rerun....
-        CommandOutcome migrate2 = run(db10, cli);
+        CommandOutcome migrate2 = run(db, cli);
         assertTrue(migrate2.isSuccess());
         y.matcher().assertOneMatch();
     }
@@ -326,7 +296,7 @@ public class UpdateCommand_DerbyIT {
     public void testDefaultSchema() {
         BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migration_schema.yml", "-u", "-d", "test")
-                .module(db10.moduleWithTestDataSource("test"))
+                .module(db.moduleWithTestDataSource("test"))
                 .autoLoadModules()
                 .createRuntime();
 

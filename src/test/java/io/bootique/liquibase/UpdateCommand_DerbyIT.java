@@ -24,6 +24,7 @@ import io.bootique.command.CommandOutcome;
 import io.bootique.di.BQModule;
 import io.bootique.jdbc.junit5.DbTester;
 import io.bootique.jdbc.junit5.Table;
+import io.bootique.jdbc.junit5.derby.DerbyTester;
 import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.junit5.BQTest;
 import io.bootique.junit5.BQTestFactory;
@@ -40,7 +41,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class UpdateCommand_DerbyIT {
 
     @BQTestTool
-    final DbTester db = DbTester.derbyDb();
+    final DerbyTester db = DerbyTester.db();
 
     @BQTestTool
     final BQTestFactory testFactory = new BQTestFactory();

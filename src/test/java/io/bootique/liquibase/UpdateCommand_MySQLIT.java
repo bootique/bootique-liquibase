@@ -21,7 +21,7 @@ package io.bootique.liquibase;
 
 import io.bootique.command.CommandOutcome;
 import io.bootique.jdbc.junit5.Table;
-import io.bootique.jdbc.junit5.tc.TcTester;
+import io.bootique.jdbc.junit5.tc.TcDbTester;
 import io.bootique.junit5.BQTest;
 import io.bootique.junit5.BQTestFactory;
 import io.bootique.junit5.BQTestTool;
@@ -34,7 +34,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class UpdateCommand_MySQLIT {
 
     @BQTestTool
-    final static TcTester db = TcTester.db("jdbc:tc:mysql:8.0.20:///");
+    final static TcDbTester db = TcDbTester.db("jdbc:tc:mysql:8.0.20:///");
 
     @BQTestTool
     final BQTestFactory testFactory = new BQTestFactory();

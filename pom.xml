@@ -37,7 +37,7 @@
 
     <properties>
         <bootique.version>${project.version}</bootique.version>
-        <testcontainers.version>1.14.2</testcontainers.version>
+        <testcontainers.version>1.15.0-rc2</testcontainers.version>
         <mysql.version>8.0.20</mysql.version>
     </properties>
 

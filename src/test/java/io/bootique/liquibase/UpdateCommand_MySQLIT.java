@@ -27,7 +27,6 @@ import io.bootique.junit5.BQTestFactory;
 import io.bootique.junit5.BQTestTool;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @BQTest
@@ -50,15 +49,11 @@ public class UpdateCommand_MySQLIT {
         assertTrue(result.isSuccess());
 
         Table x = db.getTable("X");
-        Object[] rowX = x.selectOne();
-        assertEquals("1", rowX[0]);
-        assertEquals("testX", rowX[1]);
         x.matcher().assertOneMatch();
+        x.matcher().eq("ID", 1).eq("SCHEMA", "testX").assertOneMatch();
 
         Table y = db.getTable("Y");
-        Object[] rowY = y.selectOne();
-        assertEquals("1", rowY[0]);
-        assertEquals("testY", rowY[1]);
         y.matcher().assertOneMatch();
+        y.matcher().eq("ID", 1).eq("SCHEMA", "testY").assertOneMatch();
     }
 }

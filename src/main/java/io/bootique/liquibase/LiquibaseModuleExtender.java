@@ -43,7 +43,7 @@ public class LiquibaseModuleExtender extends ModuleExtender<LiquibaseModuleExten
     }
 
     public LiquibaseModuleExtender addChangeLog(ResourceFactory changeLog) {
-        contributeChangeLogs().add(changeLog);
+        contributeChangeLogs().addInstance(changeLog);
         return this;
     }
 

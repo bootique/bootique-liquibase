@@ -17,7 +17,7 @@
   under the License.
   -->
 
-[![Build Status](https://travis-ci.org/bootique/bootique-liquibase.svg)](https://travis-ci.org/bootique/bootique-liquibase)
+[![build test deploy](https://github.com/bootique/bootique-liquibase/actions/workflows/maven.yml/badge.svg)](https://github.com/bootique/bootique-liquibase/actions/workflows/maven.yml)
 [![Maven Central](https://img.shields.io/maven-central/v/io.bootique.liquibase/bootique-liquibase.svg?colorB=brightgreen)](https://search.maven.org/artifact/io.bootique.liquibase/bootique-liquibase/)
 
 # bootique-liquibase

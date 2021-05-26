@@ -45,7 +45,6 @@ public class LiquibaseRunnerFactory {
      * Initializes a collection of Liquibase change log files. They will be executed in the provided order.
      *
      * @param changeLogs
-     * @since 0.11
      */
     @BQConfigProperty
     public void setChangeLogs(Collection<ResourceFactory> changeLogs) {

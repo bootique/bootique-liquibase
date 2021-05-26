@@ -50,7 +50,6 @@ public class LiquibaseModule extends ConfigModule {
     /**
      * @param binder DI binder passed to the Module that invokes this method.
      * @return an instance of {@link LiquibaseModuleExtender} that can be used to load custom extensions.
-     * @since 0.12
      */
     public static LiquibaseModuleExtender extend(Binder binder) {
         return new LiquibaseModuleExtender(binder);

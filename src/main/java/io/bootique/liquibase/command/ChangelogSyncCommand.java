@@ -35,9 +35,6 @@ import javax.inject.Inject;
 import javax.inject.Provider;
 import java.util.List;
 
-/**
- * @since 0.11
- */
 public class ChangelogSyncCommand extends CommandWithMetadata {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ChangelogSyncCommand.class);

@@ -25,9 +25,6 @@ import io.bootique.di.SetBuilder;
 import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.resource.ResourceFactory;
 
-/**
- * @since 0.12
- */
 public class LiquibaseModuleExtender extends ModuleExtender<LiquibaseModuleExtender> {
 
     private SetBuilder<ResourceFactory> changeLogs;

@@ -31,9 +31,6 @@ import org.slf4j.LoggerFactory;
 import javax.inject.Inject;
 import javax.inject.Provider;
 
-/**
- * @since 0.11
- */
 public class ClearCheckSumsCommand extends CommandWithMetadata {
     private static final Logger LOGGER = LoggerFactory.getLogger(ClearCheckSumsCommand.class);
 

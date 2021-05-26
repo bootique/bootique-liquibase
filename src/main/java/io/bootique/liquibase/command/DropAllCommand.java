@@ -35,9 +35,6 @@ import javax.inject.Provider;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-/**
- * @since 0.13
- */
 public class DropAllCommand extends CommandWithMetadata {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DropAllCommand.class);

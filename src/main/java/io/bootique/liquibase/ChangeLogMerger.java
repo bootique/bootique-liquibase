@@ -27,8 +27,6 @@ import java.util.Objects;
 /**
  * A simple change log merger that uses "last wins" strategy, returning the last change log collection passed to the
  * method.
- *
- * @since 0.11
  */
 public class ChangeLogMerger {
 

@@ -37,15 +37,9 @@ import java.util.Set;
 import java.util.logging.Level;
 
 public class LiquibaseModule extends ConfigModule {
+
     public static final String CONTEXT_OPTION = "lb-context";
     public static final String DEFAULT_SCHEMA_OPTION = "lb-default-schema";
-
-    public LiquibaseModule(String configPrefix) {
-        super(configPrefix);
-    }
-
-    public LiquibaseModule() {
-    }
 
     /**
      * @param binder DI binder passed to the Module that invokes this method.

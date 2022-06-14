@@ -29,7 +29,7 @@
 
     <groupId>io.bootique.liquibase</groupId>
     <artifactId>bootique-liquibase</artifactId>
-    <version>2.0.RC2-SNAPSHOT</version>
+    <version>2.0</version>
     <packaging>jar</packaging>
 
     <name>bootique-liquibase: Liquibase Integration with Bootique</name>
@@ -44,7 +44,7 @@
     <scm>
         <developerConnection>scm:git:ssh://git@github.com/bootique/bootique-liquibase</developerConnection>
         <url>https://github.com/bootique/bootique-liquibase</url>
-        <tag>HEAD</tag>
+        <tag>2.0</tag>
     </scm>
 
     <dependencyManagement>

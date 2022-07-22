@@ -50,10 +50,10 @@ public class UpdateCommand_MySQLIT {
 
         Table x = db.getTable("X");
         x.matcher().assertOneMatch();
-        x.matcher().eq("ID", 1).eq("SCHEMA", "testX").assertOneMatch();
+        x.matcher().eq("ID", 1).andEq("SCHEMA", "testX").assertOneMatch();
 
         Table y = db.getTable("Y");
         y.matcher().assertOneMatch();
-        y.matcher().eq("ID", 1).eq("SCHEMA", "testY").assertOneMatch();
+        y.matcher().eq("ID", 1).andEq("SCHEMA", "testY").assertOneMatch();
     }
 }

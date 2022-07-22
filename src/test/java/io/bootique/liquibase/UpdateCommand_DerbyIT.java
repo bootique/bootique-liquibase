@@ -65,7 +65,7 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertOneMatch();
-        a.matcher().eq("ID", 1).eq("NAME", "AA").assertOneMatch();
+        a.matcher().eq("ID", 1).andEq("NAME", "AA").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -83,8 +83,8 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertMatches(2);
-        a.matcher().eq("ID", 1).eq("NAME", "AA").assertOneMatch();
-        a.matcher().eq("ID", 2).eq("NAME", "BB").assertOneMatch();
+        a.matcher().eq("ID", 1).andEq("NAME", "AA").assertOneMatch();
+        a.matcher().eq("ID", 2).andEq("NAME", "BB").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -101,8 +101,8 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertMatches(2);
-        a.matcher().eq("ID", 1).eq("NAME", "AA").assertOneMatch();
-        a.matcher().eq("ID", 2).eq("NAME", "BB").assertOneMatch();
+        a.matcher().eq("ID", 1).andEq("NAME", "AA").assertOneMatch();
+        a.matcher().eq("ID", 2).andEq("NAME", "BB").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -121,8 +121,8 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertMatches(2);
-        a.matcher().eq("ID", 1).eq("NAME", "AA").assertOneMatch();
-        a.matcher().eq("ID", 2).eq("NAME", "BB").assertOneMatch();
+        a.matcher().eq("ID", 1).andEq("NAME", "AA").assertOneMatch();
+        a.matcher().eq("ID", 2).andEq("NAME", "BB").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -143,8 +143,8 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertMatches(2);
-        a.matcher().eq("ID", 1).eq("NAME", "AA").assertOneMatch();
-        a.matcher().eq("ID", 2).eq("NAME", "BB").assertOneMatch();
+        a.matcher().eq("ID", 1).andEq("NAME", "AA").assertOneMatch();
+        a.matcher().eq("ID", 2).andEq("NAME", "BB").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -161,7 +161,7 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertOneMatch();
-        a.matcher().eq("ID", 1).eq("NAME", "AA").assertOneMatch();
+        a.matcher().eq("ID", 1).andEq("NAME", "AA").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -177,11 +177,11 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertMatches(5);
-        a.matcher().eq("ID", 1).eq("CONTEXT", "prod").assertOneMatch();
-        a.matcher().eq("ID", 2).eq("CONTEXT", "test").assertOneMatch();
-        a.matcher().eq("ID", 3).eq("CONTEXT", "no context").assertOneMatch();
-        a.matcher().eq("ID", 4).eq("CONTEXT", "test and prod").assertOneMatch();
-        a.matcher().eq("ID", 5).eq("CONTEXT", "test or prod").assertOneMatch();
+        a.matcher().eq("ID", 1).andEq("CONTEXT", "prod").assertOneMatch();
+        a.matcher().eq("ID", 2).andEq("CONTEXT", "test").assertOneMatch();
+        a.matcher().eq("ID", 3).andEq("CONTEXT", "no context").assertOneMatch();
+        a.matcher().eq("ID", 4).andEq("CONTEXT", "test and prod").assertOneMatch();
+        a.matcher().eq("ID", 5).andEq("CONTEXT", "test or prod").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -215,9 +215,9 @@ public class UpdateCommand_DerbyIT {
 
         Table a = db.getTable("A");
         a.matcher().assertMatches(3);
-        a.matcher().eq("ID", 3).eq("CONTEXT", "no context").assertOneMatch();
-        a.matcher().eq("ID", 6).eq("CONTEXT", "!test").assertOneMatch();
-        a.matcher().eq("ID", 7).eq("CONTEXT", "!test and !prod").assertOneMatch();
+        a.matcher().eq("ID", 3).andEq("CONTEXT", "no context").assertOneMatch();
+        a.matcher().eq("ID", 6).andEq("CONTEXT", "!test").assertOneMatch();
+        a.matcher().eq("ID", 7).andEq("CONTEXT", "!test and !prod").assertOneMatch();
 
         // rerun....
         CommandOutcome migrate2 = run(db, cli);
@@ -233,7 +233,7 @@ public class UpdateCommand_DerbyIT {
 
         Table y = db.getTable("Y");
         y.matcher().assertOneMatch();
-        y.matcher().eq("ID", 1).eq("SCHEMA", "APP").assertOneMatch();
+        y.matcher().eq("ID", 1).andEq("SCHEMA", "APP").assertOneMatch();
 
         Table x = db.getTable("X");
         assertThrows(RuntimeException.class, () -> x.selectAllColumns().select());

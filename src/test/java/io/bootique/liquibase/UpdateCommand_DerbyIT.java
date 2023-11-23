@@ -56,7 +56,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testSingleSet() {
+    public void singleSet() {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations1.yml", "-u", "-d", "target/derby/migrations1"};
         CommandOutcome migrate1 = run(db, cli);
@@ -74,7 +74,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testMultipleSets() {
+    public void multipleSets() {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations2.yml", "-u"};
 
@@ -93,7 +93,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testMultipleSetsViaYaml() {
+    public void multipleSetsViaYaml() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u"};
 
         CommandOutcome migrate1 = run(db, cli);
@@ -111,7 +111,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testMultipleSetsContribution() {
+    public void multipleSetsContribution() {
         String[] cli = {"-u"};
         CommandOutcome migrate1 = run(db, cli, b -> LiquibaseModule.extend(b)
                 .addChangeLog("classpath:io/bootique/liquibase/changeset1.sql")
@@ -131,7 +131,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testYamlOverridesDI() {
+    public void yamlOverridesDI() {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations3.yml", "-u"};
         CommandOutcome migrate1 = run(db, cli, b -> LiquibaseModule.extend(b)
@@ -153,7 +153,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testDefaultDataSource() {
+    public void defaultDataSource() {
 
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migrations1_implicit_ds.yml", "-u"};
         CommandOutcome migrate1 = run(db, cli);
@@ -170,7 +170,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testContext() {
+    public void context() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "test", "-x", "prod"};
         CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
@@ -190,7 +190,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testNoExplicitContext() {
+    public void noExplicitContext() {
 
         // no explicit context, so all contexts must be run
 
@@ -208,7 +208,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testUnknownContext() {
+    public void unknownContext() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migration_context.yml", "-u", "-x", "unknown"};
         CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
@@ -226,7 +226,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testSchema() {
+    public void schema() {
         String[] cli = {"-c", "classpath:io/bootique/liquibase/migration_schema.yml", "-u"};
         CommandOutcome migrate1 = run(db, cli);
         assertTrue(migrate1.isSuccess());
@@ -245,7 +245,7 @@ public class UpdateCommand_DerbyIT {
     }
 
     @Test
-    public void testDefaultSchema() {
+    public void defaultSchema() {
         BQRuntime runtime = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migration_schema.yml", "-u", "-d", "test")
                 .module(db.moduleWithTestDataSource("test"))

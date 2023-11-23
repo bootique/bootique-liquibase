@@ -39,7 +39,7 @@ public class UpdateCommand_MySQLIT {
     final BQTestFactory testFactory = new BQTestFactory();
 
     @Test
-    public void testMigration() {
+    public void migration() {
         CommandOutcome result = testFactory
                 .app("-c", "classpath:io/bootique/liquibase/migration_mySQL.yml", "-u")
                 .autoLoadModules()

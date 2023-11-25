@@ -58,8 +58,7 @@ public class LiquibaseModule implements BQModule, BQModuleProvider {
 
     @Override
     public BuiltModule buildModule() {
-        return BuiltModule.of(new LiquibaseModule())
-                .provider(this)
+        return BuiltModule.of(this)
                 .description("Integrates Liquibase database migrations library")
                 .config(CONFIG_PREFIX, LiquibaseRunnerFactory.class)
                 .build();

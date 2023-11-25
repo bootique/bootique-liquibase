@@ -20,12 +20,15 @@
 package io.bootique.liquibase;
 
 import io.bootique.BQCoreModule;
-import io.bootique.ConfigModule;
+import io.bootique.BQModuleProvider;
+import io.bootique.bootstrap.BuiltModule;
 import io.bootique.cli.Cli;
 import io.bootique.config.ConfigurationFactory;
+import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
 import io.bootique.jdbc.DataSourceFactory;
+import io.bootique.jdbc.JdbcModule;
 import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.liquibase.command.*;
@@ -33,10 +36,14 @@ import io.bootique.meta.application.OptionMetadata;
 import io.bootique.resource.ResourceFactory;
 
 import javax.inject.Singleton;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class LiquibaseModule extends ConfigModule {
+public class LiquibaseModule implements BQModule, BQModuleProvider {
+
+    private static final String CONFIG_PREFIX = "liquibase";
 
     public static final String CONTEXT_OPTION = "lb-context";
     public static final String DEFAULT_SCHEMA_OPTION = "lb-default-schema";
@@ -48,6 +55,22 @@ public class LiquibaseModule extends ConfigModule {
     public static LiquibaseModuleExtender extend(Binder binder) {
         return new LiquibaseModuleExtender(binder);
     }
+
+    @Override
+    public BuiltModule buildModule() {
+        return BuiltModule.of(new LiquibaseModule())
+                .provider(this)
+                .description("Integrates Liquibase database migrations library")
+                .config(CONFIG_PREFIX, LiquibaseRunnerFactory.class)
+                .build();
+    }
+
+    @Override
+    @Deprecated(since = "3.0", forRemoval = true)
+    public Collection<BQModuleProvider> dependencies() {
+        return Collections.singletonList(new JdbcModule());
+    }
+
 
     @Override
     public void configure(Binder binder) {
@@ -92,13 +115,14 @@ public class LiquibaseModule extends ConfigModule {
 
     @Provides
     @Singleton
-    LiquibaseRunner provideRunner(ConfigurationFactory configFactory,
-                                  DataSourceFactory dataSourceFactory,
-                                  ChangeLogMerger changeLogMerger,
-                                  @ChangeLogs Set<ResourceFactory> injectedChangeLogs,
-                                  Cli cli) {
+    LiquibaseRunner provideRunner(
+            ConfigurationFactory configFactory,
+            DataSourceFactory dataSourceFactory,
+            ChangeLogMerger changeLogMerger,
+            @ChangeLogs Set<ResourceFactory> injectedChangeLogs,
+            Cli cli) {
 
-        return config(LiquibaseRunnerFactory.class, configFactory).createRunner(
+        return configFactory.config(LiquibaseRunnerFactory.class, CONFIG_PREFIX).createRunner(
                 dataSourceFactory,
                 configChangeLogs -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs),
                 cli);

@@ -1,1 +1,1 @@
-io.bootique.liquibase.LiquibaseModuleProvider
+io.bootique.liquibase.LiquibaseModule

@@ -19,27 +19,33 @@
 
 package io.bootique.liquibase;
 
-import io.bootique.BQModuleProvider;
-import io.bootique.bootstrap.BuiltModule;
+import io.bootique.BQRuntime;
 import io.bootique.jdbc.JdbcModule;
+import io.bootique.junit5.*;
+import org.junit.jupiter.api.Test;
 
-import java.util.Collection;
-import java.util.Collections;
+@BQTest
+public class LiquibaseModuleTest {
 
-public class LiquibaseModuleProvider implements BQModuleProvider {
+    @BQTestTool
+    public BQTestFactory testFactory = new BQTestFactory();
 
-    @Override
-    public BuiltModule buildModule() {
-        return BuiltModule.of(new LiquibaseModule())
-                .provider(this)
-                .description("Integrates Liquibase database migrations library")
-                .config("liquibase", LiquibaseRunnerFactory.class)
-                .build();
+    @Test
+    public void autoLoadable() {
+        BQModuleProviderChecker.testAutoLoadable(LiquibaseModule.class);
     }
 
-    @Override
-    @Deprecated(since = "3.0", forRemoval = true)
-    public Collection<BQModuleProvider> dependencies() {
-        return Collections.singletonList(new JdbcModule());
+    @Test
+    public void metadata() {
+        BQModuleProviderChecker.testMetadata(LiquibaseModule.class);
+    }
+
+    @Test
+    public void moduleDeclaresDependencies() {
+        final BQRuntime bqRuntime = testFactory.app().moduleProvider(new LiquibaseModule()).createRuntime();
+        BQRuntimeChecker.testModulesLoaded(bqRuntime,
+                JdbcModule.class,
+                LiquibaseModule.class
+        );
     }
 }

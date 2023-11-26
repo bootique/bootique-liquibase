@@ -21,7 +21,7 @@ package io.bootique.liquibase;
 
 import io.bootique.BQCoreModule;
 import io.bootique.BQModuleProvider;
-import io.bootique.bootstrap.BuiltModule;
+import io.bootique.ModuleCrate;
 import io.bootique.cli.Cli;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.di.BQModule;
@@ -57,8 +57,8 @@ public class LiquibaseModule implements BQModule, BQModuleProvider {
     }
 
     @Override
-    public BuiltModule buildModule() {
-        return BuiltModule.of(this)
+    public ModuleCrate moduleCrate() {
+        return ModuleCrate.of(this)
                 .description("Integrates Liquibase database migrations library")
                 .config(CONFIG_PREFIX, LiquibaseRunnerFactory.class)
                 .build();

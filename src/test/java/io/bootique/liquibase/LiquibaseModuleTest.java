@@ -19,33 +19,15 @@
 
 package io.bootique.liquibase;
 
-import io.bootique.BQRuntime;
-import io.bootique.jdbc.JdbcModule;
-import io.bootique.junit5.*;
+import io.bootique.junit5.BQModuleTester;
+import io.bootique.junit5.BQTest;
 import org.junit.jupiter.api.Test;
 
 @BQTest
 public class LiquibaseModuleTest {
 
-    @BQTestTool
-    public BQTestFactory testFactory = new BQTestFactory();
-
     @Test
-    public void autoLoadable() {
-        BQModuleProviderChecker.testAutoLoadable(LiquibaseModule.class);
-    }
-
-    @Test
-    public void metadata() {
-        BQModuleProviderChecker.testMetadata(LiquibaseModule.class);
-    }
-
-    @Test
-    public void moduleDeclaresDependencies() {
-        final BQRuntime bqRuntime = testFactory.app().moduleProvider(new LiquibaseModule()).createRuntime();
-        BQRuntimeChecker.testModulesLoaded(bqRuntime,
-                JdbcModule.class,
-                LiquibaseModule.class
-        );
+    public void check() {
+        BQModuleTester.of(LiquibaseModule.class).testAutoLoadable().testConfig();
     }
 }

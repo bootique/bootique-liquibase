@@ -20,15 +20,13 @@
 package io.bootique.liquibase;
 
 import io.bootique.BQCoreModule;
-import io.bootique.BQModuleProvider;
+import io.bootique.BQModule;
 import io.bootique.ModuleCrate;
 import io.bootique.cli.Cli;
 import io.bootique.config.ConfigurationFactory;
-import io.bootique.di.BQModule;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
 import io.bootique.jdbc.DataSourceFactory;
-import io.bootique.jdbc.JdbcModule;
 import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.liquibase.command.*;
@@ -36,12 +34,10 @@ import io.bootique.meta.application.OptionMetadata;
 import io.bootique.resource.ResourceFactory;
 
 import javax.inject.Singleton;
-import java.util.Collection;
-import java.util.Collections;
 import java.util.Set;
 import java.util.logging.Level;
 
-public class LiquibaseModule implements BQModule, BQModuleProvider {
+public class LiquibaseModule implements BQModule {
 
     private static final String CONFIG_PREFIX = "liquibase";
 
@@ -57,19 +53,12 @@ public class LiquibaseModule implements BQModule, BQModuleProvider {
     }
 
     @Override
-    public ModuleCrate moduleCrate() {
+    public ModuleCrate crate() {
         return ModuleCrate.of(this)
                 .description("Integrates Liquibase database migrations library")
                 .config(CONFIG_PREFIX, LiquibaseRunnerFactory.class)
                 .build();
     }
-
-    @Override
-    @Deprecated(since = "3.0", forRemoval = true)
-    public Collection<BQModuleProvider> dependencies() {
-        return Collections.singletonList(new JdbcModule());
-    }
-
 
     @Override
     public void configure(Binder binder) {

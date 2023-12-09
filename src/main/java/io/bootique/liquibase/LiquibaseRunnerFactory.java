@@ -24,69 +24,79 @@ import io.bootique.annotation.BQConfigProperty;
 import io.bootique.cli.Cli;
 import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.jdbc.liquibase.LiquibaseRunner;
+import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.resource.ResourceFactory;
 
+import javax.inject.Inject;
 import javax.sql.DataSource;
 import java.util.Collection;
-import java.util.function.Function;
+import java.util.Set;
 
 @BQConfig("Configures Liquibase migrations.")
 public class LiquibaseRunnerFactory {
 
+    private final DataSourceFactory dataSourceFactory;
+    private final ChangeLogMerger changeLogMerger;
+    @ChangeLogs
+    private final Set<ResourceFactory> injectedChangeLogs;
+    private final Cli cli;
+
     private String datasource;
     private Collection<ResourceFactory> changeLogs;
+
+    @Inject
+    public LiquibaseRunnerFactory(
+            DataSourceFactory dataSourceFactory,
+            ChangeLogMerger changeLogMerger,
+            @ChangeLogs Set<ResourceFactory> injectedChangeLogs,
+            Cli cli) {
+        this.dataSourceFactory = dataSourceFactory;
+        this.changeLogMerger = changeLogMerger;
+        this.injectedChangeLogs = injectedChangeLogs;
+        this.cli = cli;
+    }
 
     @BQConfigProperty("DataSource name defined under 'jdbc' that should be used for migrations execution.")
     public void setDatasource(String datasource) {
         this.datasource = datasource;
     }
 
-    /**
-     * Initializes a collection of Liquibase change log files. They will be executed in the provided order.
-     *
-     * @param changeLogs
-     */
-    @BQConfigProperty
+    @BQConfigProperty("A collection of Liquibase change log files executed in the provided order.")
     public void setChangeLogs(Collection<ResourceFactory> changeLogs) {
         this.changeLogs = changeLogs;
     }
 
-    public LiquibaseRunner createRunner(
-            DataSourceFactory dataSourceFactory,
-            Function<Collection<ResourceFactory>, Collection<ResourceFactory>> changeLogMerger,
-            Cli cli) {
-        DataSource ds = getDataSource(dataSourceFactory);
-        Collection<ResourceFactory> allChangeLogs = changeLogMerger.apply(changeLogs);
+    public LiquibaseRunner create() {
+        DataSource ds = findDataSource();
         return new LiquibaseRunner(
-                allChangeLogs,
+                changeLogMerger.merge(injectedChangeLogs, changeLogs),
                 ds,
                 cli.optionString(LiquibaseModule.DEFAULT_SCHEMA_OPTION));
     }
 
-    private DataSource getDataSource(DataSourceFactory dataSourceFactory) {
+    private DataSource findDataSource() {
+        return datasource != null
+                ? namedDataSource(datasource)
+                : defaultDataSource();
+    }
+
+    private DataSource defaultDataSource() {
         Collection<String> allNames = dataSourceFactory.allNames();
 
-        if (datasource == null) {
-            if (allNames.isEmpty()) {
-                throw new IllegalStateException("No DataSources are available for Liquibase. " +
-                        "Add a DataSource via 'bootique-jdbc' or 'bootique-liquibase'");
-            }
-
-            if (allNames.size() == 1) {
-                return dataSourceFactory.forName(allNames.iterator().next());
-            } else {
-                throw new IllegalStateException(
-                        String.format("Can't map Liquibase DataSource: 'liquibase.datasource' is missing. " +
-                                "Available DataSources are %s", allNames));
-            }
-        } else {
-            if (!allNames.contains(datasource)) {
-                throw new IllegalStateException(
-                        String.format("Can't map Liquibase DataSource: 'liquibase.datasource' is set to '%s'. " +
-                                "Available DataSources: %s", datasource, allNames));
-            }
-
-            return dataSourceFactory.forName(datasource);
+        if (allNames.isEmpty()) {
+            throw new IllegalStateException("No DataSources configured. You may configure a DataSource via 'bootique-jdbc'");
         }
+
+        if (allNames.size() == 1) {
+            return dataSourceFactory.forName(allNames.iterator().next());
+        }
+
+        throw new IllegalStateException(
+                String.format("Multiple DataSources are available (%s). You must specify the name of Liquibase " +
+                        "DataSource explicitly via 'liquibase.datasource'", allNames));
+    }
+
+    private DataSource namedDataSource(String name) {
+        return dataSourceFactory.forName(name);
     }
 }

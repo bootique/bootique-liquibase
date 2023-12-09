@@ -22,19 +22,14 @@ package io.bootique.liquibase;
 import io.bootique.BQCoreModule;
 import io.bootique.BQModule;
 import io.bootique.ModuleCrate;
-import io.bootique.cli.Cli;
 import io.bootique.config.ConfigurationFactory;
 import io.bootique.di.Binder;
 import io.bootique.di.Provides;
-import io.bootique.jdbc.DataSourceFactory;
 import io.bootique.jdbc.liquibase.LiquibaseRunner;
-import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.liquibase.command.*;
 import io.bootique.meta.application.OptionMetadata;
-import io.bootique.resource.ResourceFactory;
 
 import javax.inject.Singleton;
-import java.util.Set;
 import java.util.logging.Level;
 
 public class LiquibaseModule implements BQModule {
@@ -103,16 +98,7 @@ public class LiquibaseModule implements BQModule {
 
     @Provides
     @Singleton
-    LiquibaseRunner provideRunner(
-            ConfigurationFactory configFactory,
-            DataSourceFactory dataSourceFactory,
-            ChangeLogMerger changeLogMerger,
-            @ChangeLogs Set<ResourceFactory> injectedChangeLogs,
-            Cli cli) {
-
-        return configFactory.config(LiquibaseRunnerFactory.class, CONFIG_PREFIX).createRunner(
-                dataSourceFactory,
-                configChangeLogs -> changeLogMerger.merge(injectedChangeLogs, configChangeLogs),
-                cli);
+    LiquibaseRunner provideRunner(ConfigurationFactory configFactory) {
+        return configFactory.config(LiquibaseRunnerFactory.class, CONFIG_PREFIX).create();
     }
 }

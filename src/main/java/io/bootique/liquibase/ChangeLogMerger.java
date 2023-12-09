@@ -30,8 +30,7 @@ import java.util.Objects;
  */
 public class ChangeLogMerger {
 
-    public Collection<ResourceFactory> merge(Collection<ResourceFactory> logs1,
-                                             Collection<ResourceFactory> logs2) {
+    public Collection<ResourceFactory> merge(Collection<ResourceFactory> logs1, Collection<ResourceFactory> logs2) {
         return logs2 != null ? logs2 : Objects.requireNonNull(logs1);
     }
 }

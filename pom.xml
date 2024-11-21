@@ -36,7 +36,6 @@
     <description>Provides Liquibase integration with Bootique.</description>
 
     <properties>
-        <bootique.version>${project.version}</bootique.version>
         <mysql.version>8.0.33</mysql.version>
     </properties>
 
@@ -51,17 +50,17 @@
             <dependency>
                 <groupId>io.bootique.jdbc</groupId>
                 <artifactId>bootique-jdbc-liquibase-internal</artifactId>
-                <version>${bootique.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.bootique.jdbc</groupId>
                 <artifactId>bootique-jdbc-junit5-derby</artifactId>
-                <version>${bootique.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.bootique.jdbc</groupId>
                 <artifactId>bootique-jdbc-junit5-testcontainers</artifactId>
-                <version>${bootique.version}</version>
+                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.testcontainers</groupId>

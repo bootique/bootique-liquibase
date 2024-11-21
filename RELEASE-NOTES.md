@@ -1,4 +1,4 @@
-## 3.0-M5
+## 3.0-M6
 
 * #34 Upgrade to Liquibase 4.x
 

@@ -29,7 +29,7 @@ import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.liquibase.command.*;
 import io.bootique.meta.application.OptionMetadata;
 
-import javax.inject.Singleton;
+import jakarta.inject.Singleton;
 import java.util.logging.Level;
 
 public class LiquibaseModule implements BQModule {

@@ -27,7 +27,7 @@ import io.bootique.jdbc.liquibase.LiquibaseRunner;
 import io.bootique.liquibase.annotation.ChangeLogs;
 import io.bootique.resource.ResourceFactory;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import javax.sql.DataSource;
 import java.util.Collection;
 import java.util.Set;

@@ -36,7 +36,7 @@
     <description>Provides Liquibase integration with Bootique.</description>
 
     <properties>
-        <mysql.version>8.0.33</mysql.version>
+        <mysql.version>9.2.0</mysql.version>
     </properties>
 
     <scm>
@@ -68,8 +68,8 @@
                 <version>${testcontainers.version}</version>
             </dependency>
             <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
+                <groupId>com.mysql</groupId>
+                <artifactId>mysql-connector-j</artifactId>
                 <version>${mysql.version}</version>
             </dependency>
             <dependency>
@@ -123,8 +123,8 @@
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

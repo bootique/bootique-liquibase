@@ -41,7 +41,7 @@ public class UpdateCommand_MySQLIT {
     @Test
     public void migration() {
         CommandOutcome result = testFactory
-                .app("-c", "classpath:io/bootique/liquibase/migration_mySQL.yml", "-u")
+                .app("--config", "classpath:io/bootique/liquibase/migration_mySQL.yml", "-u")
                 .autoLoadModules()
                 .module(db.moduleWithTestDataSource("ds"))
                 .run();

@@ -21,7 +21,7 @@ package io.bootique.liquibase;
 
 import io.bootique.BQRuntime;
 import io.bootique.command.CommandOutcome;
-import io.bootique.di.BQModule;
+import io.bootique.BQModule;
 import io.bootique.jdbc.junit5.Table;
 import io.bootique.jdbc.junit5.derby.DerbyTester;
 import io.bootique.jdbc.liquibase.LiquibaseRunner;

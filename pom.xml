@@ -36,7 +36,7 @@
     <description>Provides Liquibase integration with Bootique.</description>
 
     <properties>
-        <mysql.version>9.2.0</mysql.version>
+        <mysql.version>9.6.0</mysql.version>
     </properties>
 
     <scm>
